@@ -1,0 +1,322 @@
+{
+ "id": "concept.flow.projection-and-the-pressure-poisson-matrix",
+ "type": "concept",
+ "status": "full",
+ "title": "The projection solves one sparse matrix every step: minus four on the diagonal, plus one for each neighbour",
+ "summary": "Finding the pressure that removes the divergence is a linear system A p = b. A is the five-point Laplacian: a row for each cell with minus the number of neighbours on the diagonal and plus one for each neighbour, so only five of n entries in a row are nonzero. Walls, open sides and obstacles change the rows at the edge, and a box with only walls makes A singular. The Matrix tab of the Flow workspace draws the real matrix.",
+ "subjects": [
+  "cfd-numerics"
+ ],
+ "media": {
+  "kind": "image",
+  "src": "media/flow/flow-matrix_dark.webp",
+  "src_light": "media/flow/flow-matrix_light.webp",
+  "alt": "Heat map of a 36 by 36 sparse matrix: a rose diagonal and teal off-diagonals, in a block tridiagonal pattern of 6 by 6 blocks, beside the five-point stencil.",
+  "caption": "Screenshot of the Matrix tab of the Flow workspace: the 36 by 36 matrix of the pressure equation on a 6 by 6 grid with open sides, with its 156 nonzeros."
+ },
+ "source": {
+  "note": "Standard theory (Chorin's projection method, Stam's stable fluids, Fedkiw, Stam and Jensen's vorticity confinement, Jacobi and conjugate-gradient iteration). No project result is quoted. Every number on this page was computed with numpy / sympy or measured on the Flow workspace's own solver by tools/flow_numbers.py and tools/flow_numbers.mjs, and the picture is a screenshot of that workspace."
+ },
+ "plot_classes": [],
+ "read_the_figure": {
+  "question": "Which cells does each equation of the pressure system couple, and what does the boundary change?",
+  "axes": "Row index down, column index across, both running through the cells of the grid line by line. A coloured square at (row, column) means that the equation of the cell in the row contains the pressure of the cell in the column. Rose: negative entry (the diagonal), teal: +1, dark: zero.",
+  "look_at": [
+   "The diagonal: a constant minus four away from the boundary.",
+   "The two bands next to the diagonal (left and right neighbour) and the two bands one block away (neighbours above and below): the block tridiagonal structure.",
+   "The rows at a wall: with the wall rule the diagonal drops to minus three on an edge and minus two in a corner.",
+   "How empty the matrix is: 156 nonzeros of 1296 entries for a 6 by 6 grid, 0.12 percent for the 64 by 64 grid of the home page."
+  ],
+  "proves": "That every pressure value depends directly on its four neighbours only, so the matrix is sparse and a solve can be iterative.",
+  "if_wrong": [
+   "Reading the pattern as a dense matrix because it is drawn square: the cost of a solve depends on the nonzeros, not on n squared.",
+   "Forgetting that the rows at the boundary depend on the boundary rule; a heat map without the rule stated is ambiguous."
+  ],
+  "must_check": [
+   "Grid size m by m and the number of unknowns n = m^2.",
+   "The boundary rule on each side.",
+   "Row and column ordering (here: line by line)."
+  ]
+ },
+ "terms": [
+  {
+   "term": "Poisson equation",
+   "meaning": "The equation for a field whose Laplacian is given. For pressure the given quantity is the divergence of the predicted velocity.",
+   "symbol": "\\nabla^2p=\\nabla\\!\\cdot u^*"
+  },
+  {
+   "term": "Five-point stencil",
+   "meaning": "The finite-difference Laplacian from the cell and its four neighbours: sum of the neighbours minus four times the cell.",
+   "symbol": "p_{i-1,j}+p_{i+1,j}+p_{i,j-1}+p_{i,j+1}-4p_{i,j}"
+  },
+  {
+   "term": "Sparse matrix",
+   "meaning": "A matrix with almost all entries zero. It is stored and used as a list of neighbours, never as an n by n array.",
+   "symbol": "\\mathrm{nnz}\\approx5n"
+  },
+  {
+   "term": "Dirichlet condition",
+   "meaning": "The value is fixed at the boundary. An open side fixes the pressure to zero, so the missing neighbour counts as 0 and the diagonal keeps its minus four.",
+   "symbol": "p=0"
+  },
+  {
+   "term": "Neumann condition",
+   "meaning": "The normal derivative is fixed. A wall means no pressure gradient across it: the missing neighbour is a copy of the cell, which folds its +1 into the diagonal.",
+   "symbol": "\\partial_np=0"
+  },
+  {
+   "term": "Singular matrix",
+   "meaning": "A matrix without an inverse. With walls on all sides adding a constant to the pressure changes nothing, so A times the constant vector is zero.",
+   "symbol": "A\\mathbf 1=0"
+  },
+  {
+   "term": "Compatibility condition",
+   "meaning": "For a singular system a solution exists only if the right-hand side has zero sum: what flows in must flow out. The workspace subtracts the mean of b before solving.",
+   "symbol": "\\textstyle\\sum_c b_c=0"
+  },
+  {
+   "term": "Condition number",
+   "meaning": "The ratio of the largest to the smallest eigenvalue size. It governs how slowly iterative solvers converge and how much a small residual can hide a large error.",
+   "symbol": "\\kappa(A)"
+  },
+  {
+   "term": "Collocated grid",
+   "meaning": "A grid on which velocity and pressure live at the same points (the hero's choice). It is simple but the divergence and the Laplacian do not fit together exactly.",
+   "symbol": ""
+  }
+ ],
+ "remember": [
+  "$(Ap)_{i,j}=p_{i-1,j}+p_{i+1,j}+p_{i,j-1}+p_{i,j+1}-4p_{i,j}$: diagonal $-4$, four entries $+1$.",
+  "Open $m\\times m$ grid: $n=m^2$ unknowns and $5m^2-4m$ nonzeros: 156 for $m=6$ ($n=36$), 20,224 for $m=64$ ($n=4096$).",
+  "Open side: missing neighbour is 0, diagonal stays $-4$. Wall side: missing neighbour equals the cell, diagonal becomes $-3$ at an edge and $-2$ in a corner. Periodic side: the neighbour is on the other side.",
+  "All walls: $A\\mathbf 1=0$ (singular) and $b$ must sum to zero.",
+  "Condition number of the open $m\\times m$ matrix: $\\kappa=\\cot^2\\!\\frac{\\pi}{2(m+1)}$: 19.20 for $m=6$, 1712 for $m=64$.",
+  "The projection solves $Ap=b$ with $b$ the central-difference divergence, then subtracts the central-difference gradient of $p$."
+ ],
+ "understand": [
+  {
+   "title": "Easy: every cell asks its neighbours",
+   "text": "Pressure at a cell is set by one rule: it is the average of its four neighbours, corrected by how much fluid is trying to leave. Writing that rule for every cell at once gives a list of equations that each mention only a cell and its four neighbours. As a table of coefficients it is almost all zeros, a thin diagonal band, which is why the system can be solved without ever writing the table down."
+  },
+  {
+   "title": "Medium: the matrix, row by row",
+   "text": "In the interior a row has $-4$ on the diagonal and $+1$ in the four columns of the neighbours. Number the cells line by line and the left and right neighbours sit next to the diagonal, while the cells above and below sit a whole line (m columns) away: that is the block tridiagonal pattern you see in the Matrix tab. At the edge the rule decides: an open side counts the missing neighbour as zero, a wall copies the cell."
+  },
+  {
+   "title": "Hard: walls make the matrix singular",
+   "text": "With walls on every side, each row sums to zero (the diagonal is minus the number of neighbours), so the constant vector is in the null space: pressure is only defined up to an additive constant, and a solution exists only if the divergence sums to zero. The workspace subtracts the mean of $b$ before solving. For the open grid the matrix is invertible with condition number $\\cot^2(\\pi/(2(m+1)))$: 19.2 at m = 6, 1712 at m = 64. The condition number grows like $m^2$, which is why large grids are slow for simple iterations."
+  },
+  {
+   "title": "Hardest: the solve and the subtraction use different stencils",
+   "text": "The divergence and the gradient use central differences over two cells, so the divergence of the gradient is a Laplacian with spacing two, while A is the compact Laplacian with spacing one. The wide one cannot see a checkerboard pressure at all: applied to $(-1)^{i+j}$ it gives 0, while the compact one gives $-8p$ (size 8). So a checkerboard in the pressure is solved for but then invisible to the velocity update, and a rough right-hand side leaves a floor of divergence that more iterations cannot remove: for the plume field the ratio after to before was 0.546, 0.508, 0.507 for 6, 24 and 80 Jacobi sweeps and 0.519 for an exact solve. For a smooth field an exact solve leaves 0.0024."
+  }
+ ],
+ "steps": [
+  {
+   "title": "Discretise the Laplacian on a uniform grid",
+   "tex": "\\nabla^2p\\Big|_{i,j}\\approx\\frac{p_{i-1,j}+p_{i+1,j}+p_{i,j-1}+p_{i,j+1}-4p_{i,j}}{h^2}",
+   "note": "Second-order accurate: Taylor expand $p_{i\\pm1,j}$ and add. The factor $1/h^2$ is absorbed into the scaling of $p$ in the workspace.",
+   "live": null
+  },
+  {
+   "title": "Write one equation per fluid cell",
+   "tex": "(Ap)_c=\\sum_{c'\\sim c}p_{c'}-d_c\\,p_c=b_c,\\qquad d_c=\\#\\text{fluid neighbours}+\\#\\text{open neighbours}",
+   "note": "A wall or a solid neighbour contributes nothing (its pressure equals $p_c$), an open neighbour contributes $-p_c$ to the diagonal only.",
+   "live": "flow?tab=matrix&m=6&bc=open"
+  },
+  {
+   "title": "The matrix of an m by m open grid",
+   "tex": "A=\\begin{pmatrix}T&I&&\\\\I&T&I&\\\\&I&T&\\ddots\\\\&&\\ddots&\\ddots\\end{pmatrix},\\quad T=\\begin{pmatrix}-4&1&&\\\\1&-4&1&\\\\&1&-4&\\ddots\\\\&&\\ddots&\\ddots\\end{pmatrix}",
+   "note": "m by m blocks. Counting entries: $m^2$ on the diagonal and $4m(m-1)$ off it, so $5m^2-4m$ in all.",
+   "live": "flow?tab=matrix&m=6&bc=open"
+  },
+  {
+   "title": "Change the boundary rule, change the rows",
+   "tex": "d_c=\\begin{cases}4&\\text{interior, or an open side}\\\\3&\\text{wall edge}\\\\2&\\text{wall corner}\\end{cases}\\qquad A\\mathbf 1=0\\ \\text{for walls only}",
+   "note": "Add up a wall row: the entries sum to zero, so the all-ones vector solves $A x=0$.",
+   "live": "flow?tab=matrix&m=6&bc=wall"
+  },
+  {
+   "title": "Right-hand side and compatibility",
+   "tex": "b_c=\\tfrac12\\big(u_R-u_L+v_T-v_B\\big)_c,\\qquad \\sum_c b_c=0\\ \\text{required when}\\ A\\mathbf 1=0",
+   "note": "For a singular system the workspace subtracts the mean of $b$, the discrete form of 'what flows in must flow out'.",
+   "live": null
+  },
+  {
+   "title": "Correct the velocity",
+   "tex": "u^{n+1}_c=u^*_c-\\tfrac12\\big(p_R-p_L,\\ \\ p_T-p_B\\big)_c",
+   "note": "Central-difference gradient. Its divergence is the wide Laplacian, which is why the discrete divergence does not become exactly zero.",
+   "live": "flow?preset=4&view=pressure&iters=40"
+  }
+ ],
+ "apply": {
+  "worked": {
+   "title": "Build the matrix of a 3 by 3 open grid and apply it",
+   "problem": "Write the 9 by 9 matrix A for a 3 by 3 grid with open sides, numbering the cells line by line (cell 0 is bottom left). Apply it to p = (1, 0, 0, 0, 0, 0, 0, 0, 0), a unit pressure in the bottom-left corner cell.",
+   "solution": [
+    {
+     "text": "Every diagonal entry is $-4$ (open sides: the missing neighbour is zero but the diagonal keeps its $-4$). The off-diagonal $+1$ entries mark the neighbours: cell 0 touches cells 1 and 3, cell 4 touches 1, 3, 5, 7.",
+     "tex": "A_{00}=-4,\\ A_{01}=A_{03}=1,\\ \\ A_{44}=-4,\\ A_{41}=A_{43}=A_{45}=A_{47}=1"
+    },
+    {
+     "text": "Count the nonzeros: nine diagonal entries and $4\\cdot3\\cdot2=24$ neighbour entries.",
+     "tex": "5m^2-4m=45-12=33"
+    },
+    {
+     "text": "$A p$ is the first column of $A$: $-4$ in cell 0 and $+1$ in its neighbours 1 and 3.",
+     "tex": "A p=(-4,\\ 1,\\ 0,\\ 1,\\ 0,\\ 0,\\ 0,\\ 0,\\ 0)^T"
+    }
+   ],
+   "answer": "33 nonzeros; A p = (-4, 1, 0, 1, 0, 0, 0, 0, 0). The Matrix tab at m = 3 shows the same 9 by 9 pattern, and tests/js/flow_operator_test.mjs checks the solver's operator against a dense matrix written from the rule for seven grids to 1e-12."
+  },
+  "code": "import numpy as np\n\ndef open_laplacian(m):\n    \"\"\"5-point Laplacian on an m x m grid with open (p = 0) sides, cells numbered line by line\"\"\"\n    n = m * m\n    A = np.zeros((n, n))\n    for j in range(m):\n        for i in range(m):\n            c = j * m + i\n            A[c, c] = -4.0\n            for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1)):\n                ni, nj = i + di, j + dj\n                if 0 <= ni < m and 0 <= nj < m:\n                    A[c, nj * m + ni] = 1.0\n    return A\n\nA = open_laplacian(6)\nprint(\"nonzeros:\", np.count_nonzero(A), \" expected 5m^2-4m =\", 5 * 36 - 24)\nprint(\"condition number:\", np.linalg.cond(A), \" cot^2(pi/14) =\", 1 / np.tan(np.pi / 14) ** 2)\np = np.random.default_rng(1).standard_normal(36)\nprint(\"A p = b, then solve:\", np.max(np.abs(np.linalg.solve(A, A @ p) - p)))\n"
+ },
+ "analyze": [
+  {
+   "q": "Explain why a box with walls on all four sides gives a singular matrix, and why the solution is then only defined up to a constant.",
+   "hint": "Add up the entries of a row at an interior cell, an edge cell and a corner cell."
+  },
+  {
+   "q": "The Matrix tab shows heavy lines every m rows and columns. What do they separate, and why are the entries just outside the central blocks the vertical neighbours?",
+   "hint": "With line-by-line numbering, the cell above is m positions later."
+  },
+  {
+   "q": "Why can a checkerboard pressure (every other cell +1 and -1) be present in the solution of $Ap=b$ and yet have no effect on the velocity update?",
+   "hint": "Take the central difference of $(-1)^{i+j}$ over two cells."
+  }
+ ],
+ "evaluate": [
+  {
+   "q": "Would you ever form the 4096 by 4096 matrix of the 64 by 64 grid explicitly? Compare the memory of a dense matrix with a sparse list.",
+   "hint": "A dense float64 matrix has 4096 squared entries, 134 MB; the 20,224 nonzeros take about 243 kB with an index each."
+  },
+  {
+   "q": "A collocated grid is simple but leaves a floor of divergence. A staggered grid removes it. What would you give up in the hero by switching?",
+   "hint": "Think of the shader code: how many textures, how many neighbour reads, how boundary conditions at an obstacle would have to be written."
+  }
+ ],
+ "create": [
+  "Add an obstacle (a solid block) to the matrix view and predict which rows change and which entries disappear before drawing it.",
+  "Design a check that distinguishes an operator with the wrong boundary rule from one with the wrong stencil, using the property $A\\mathbf 1=0$."
+ ],
+ "checks": [
+  {
+   "tier": "understand",
+   "q": "What does one row of the pressure matrix say, in words?",
+   "hint": "Sum over neighbours minus four times the cell.",
+   "answer": "That the pressure of a cell, compared with the average of its four neighbours, is set by the divergence of the predicted velocity in that cell: sum of the neighbours minus four times the cell equals the divergence. Pressure is smooth except where fluid is being created or destroyed."
+  },
+  {
+   "tier": "apply",
+   "q": "How many nonzeros does the matrix of the 64 by 64 open grid have, and what fraction of the 4096 by 4096 entries is that?",
+   "hint": "5 m^2 - 4 m.",
+   "answer": "20,224 nonzeros, 0.121 % of the entries (for m = 6: 156 of 1296, 12.04 %). A dense copy would need 134 MB."
+  },
+  {
+   "tier": "analyze",
+   "q": "On a 6 by 6 grid with walls on every side, what is the trace of A, and why is A singular?",
+   "hint": "Count interior, edge and corner cells.",
+   "answer": "16 interior cells with diagonal -4, 16 edge cells with -3 and 4 corners with -2: trace = -64 - 48 - 8 = -120 (the open grid has -144). Each row sums to zero, so the all-ones vector satisfies A x = 0 and A has no inverse."
+  },
+  {
+   "tier": "evaluate",
+   "q": "For the plume field the divergence after the projection is 0.51 of the divergence before for 80 Jacobi sweeps and 0.52 for an exact CG solve. How can the less converged solve be better?",
+   "hint": "What does the solve minimise, and what is the divergence measured with?",
+   "answer": "The solve drives the residual of the compact five-point system to zero. The divergence after the projection is measured with the wide central-difference stencil. For a rough right-hand side the two are different quantities, so minimising one does not minimise the other, and an unconverged pressure can happen to leave slightly less wide divergence. The difference (0.507 against 0.519) is small compared with the floor of about 0.5 that neither can remove."
+  },
+  {
+   "tier": "create",
+   "q": "Sketch a modification of the projection that has no floor on a collocated grid.",
+   "hint": "Make the operator in the solve equal the divergence of the gradient that is used for the update.",
+   "answer": "Solve with the wide operator itself: build A as D G, where G is the central-difference gradient and D the central-difference divergence, so that the update removes exactly the divergence the solve targets. The price is that the matrix couples cells two apart, splits into four independent checkerboard-like subgrids and is singular on the checkerboard modes. Rhie-Chow interpolation and staggered grids are the usual remedies."
+  }
+ ],
+ "values": [
+  {
+   "label": "Nonzeros of the open m x m matrix, m = 6 (n = 36) and m = 64 (n = 4096)",
+   "value": "156 and 20,224",
+   "from": "tools/flow_numbers.py (numpy / sympy) (5m^2 - 4m; the dense matrix agrees: 156)"
+  },
+  {
+   "label": "Fraction of nonzero entries, m = 6 and m = 64",
+   "value": "12.04 % and 0.121 %",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Dense and sparse storage for m = 64",
+   "value": "134.2 MB and 243 kB",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Condition number, open grid, m = 6",
+   "value": "19.196",
+   "from": "tools/flow_numbers.py (numpy / sympy) (numpy cond: 19.196)"
+  },
+  {
+   "label": "Condition number, open grid, m = 64",
+   "value": "1711.7",
+   "from": "tools/flow_numbers.py (numpy / sympy) (cot^2(pi/130))"
+  },
+  {
+   "label": "Trace of A on 6 by 6: walls on all sides, open sides",
+   "value": "-120 and -144",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Wide divergence of the gradient of a checkerboard, and |A p| of it",
+   "value": "0 and 8",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "Plume field, divergence after / before: Jacobi 6, 24, 80 sweeps",
+   "value": "0.546, 0.508, 0.507",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js), N = 64, step 150, warm start 0.8"
+  },
+  {
+   "label": "Plume field, divergence after / before: exact CG (600 iterations)",
+   "value": "0.519",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "Smooth field (N = 32), exact solve: divergence after / before",
+   "value": "0.00241",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "Solver operator against a dense reference matrix, relative error",
+   "value": "0 to 1e-12 (seven grids)",
+   "from": "tests/js/flow_operator_test.mjs"
+  }
+ ],
+ "live": [
+  {
+   "route": "flow?tab=matrix&m=6&bc=open",
+   "label": "Flow: the 36 by 36 pressure matrix, open sides",
+   "static_ok": true
+  },
+  {
+   "route": "flow?tab=matrix&m=6&bc=wall",
+   "label": "Flow: the same grid with walls (singular)",
+   "static_ok": true
+  },
+  {
+   "route": "flow?preset=4&view=pressure&iters=40",
+   "label": "Flow: pressure of the projection test",
+   "static_ok": true
+  }
+ ],
+ "related": [
+  "concept.flow.navier-stokes-and-incompressibility",
+  "concept.flow.jacobi-iteration-and-convergence",
+  "concept.stiffness-stability-and-neural-odes"
+ ],
+ "cite": [
+  "trefethen1997"
+ ],
+ "provenance": {
+  "author": "agent (Claude), WP-A2",
+  "opened_image": "media/flow/flow-matrix_dark.webp",
+  "reviewed_by_owner": false,
+  "date": "2026-10-06"
+ }
+}

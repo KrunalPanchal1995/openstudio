@@ -1,0 +1,326 @@
+{
+ "id": "concept.flow.vorticity-confinement-and-buoyancy",
+ "type": "concept",
+ "status": "full",
+ "title": "Vorticity confinement and buoyancy are forces added by hand: the first puts back the curls the grid smears out, the second makes hot gas rise",
+ "summary": "Numerical diffusion damps small vortices, so a simulated plume looks smoother than a real one. Fedkiw's vorticity confinement computes where the vorticity is concentrated and adds a force that pushes the flow around those places, with a strength set by one parameter. Buoyancy is a body force proportional to the temperature (and minus the weight of the smoke), the Boussinesq model. Both are cheap and visually effective, and both are modelling choices, not physics.",
+ "subjects": [
+  "cfd-numerics"
+ ],
+ "media": {
+  "kind": "image",
+  "src": "media/flow/flow-plume_dark.webp",
+  "src_light": "media/flow/flow-plume_light.webp",
+  "alt": "Flow workspace, scene Smoke plume, dye and temperature view: a teal and amber plume rising from the bottom centre of a dark square, curling into mushroom shapes at the top.",
+  "caption": "Screenshot of the Flow workspace (scene 0): a hot plume driven by buoyancy, with vorticity confinement keeping its curls."
+ },
+ "source": {
+  "note": "Standard theory (Chorin's projection method, Stam's stable fluids, Fedkiw, Stam and Jensen's vorticity confinement, Jacobi and conjugate-gradient iteration). No project result is quoted. Every number on this page was computed with numpy / sympy or measured on the Flow workspace's own solver by tools/flow_numbers.py and tools/flow_numbers.mjs, and the picture is a screenshot of that workspace."
+ },
+ "plot_classes": [],
+ "read_the_figure": {
+  "question": "Do the curls of the plume come from the physics or from the added forces, and what happens if you switch the forces off?",
+  "axes": "The picture is the simulation box, x to the right and y up. Brightness of teal is the dye, amber is the temperature (hot gas). The bottom-centre bright spot is the burner that injects hot dye and an upward jet.",
+  "look_at": [
+   "The mushroom heads at the top of the plume: that is a pair of counter-rotating vortices lifted by the buoyancy.",
+   "The width of the stem: set by the burner size and by how much the grid diffuses it.",
+   "What happens to the small curls when Vorticity confinement is set to 0 in the panel."
+  ],
+  "proves": "That the flow keeps its small-scale rotation at the chosen strength. It does not prove that the plume has the physical curl size: confinement adds vorticity beyond what the inviscid flow would keep.",
+  "if_wrong": [
+   "Reading the crisp curls as a resolved turbulence result when they are the result of a tuned force.",
+   "Raising the confinement until the picture looks right and then trusting the energy or the vorticity numbers."
+  ],
+  "must_check": [
+   "The confinement strength and the grid (the force scales with the cell size).",
+   "The buoyancy and weight coefficients and the temperature scale.",
+   "Whether any dissipation of the temperature and dye is on."
+  ]
+ },
+ "terms": [
+  {
+   "term": "Vorticity",
+   "meaning": "The local spin of the flow: twice the angular velocity of a fluid parcel. In two dimensions it is a single number per point.",
+   "symbol": "\\omega=\\partial_xv-\\partial_yu"
+  },
+  {
+   "term": "Circulation",
+   "meaning": "The line integral of the velocity around a closed loop, equal to the vorticity integrated over the area enclosed.",
+   "symbol": "\\Gamma=\\oint u\\!\\cdot\\!dl=\\iint\\omega\\,dA"
+  },
+  {
+   "term": "Vorticity confinement",
+   "meaning": "A force that points around the local maxima of the vorticity magnitude, strengthening the spin that numerical diffusion removes.",
+   "symbol": "f_c=\\varepsilon h\\,(N\\times\\omega\\hat z)"
+  },
+  {
+   "term": "Gradient of the vorticity magnitude",
+   "meaning": "The direction in which the vorticity magnitude grows fastest. Normalised, it points toward the vortex centre.",
+   "symbol": "N=\\frac{\\nabla|\\omega|}{|\\nabla|\\omega||}"
+  },
+  {
+   "term": "Boussinesq approximation",
+   "meaning": "Treat the density as constant except in the gravity term, where its small variation drives the flow.",
+   "symbol": "f=-\\frac{\\rho-\\rho_0}{\\rho_0}g\\hat y\\approx\\beta g\\,\\Delta T\\,\\hat y"
+  },
+  {
+   "term": "Thermal expansion coefficient",
+   "meaning": "The fractional change of density per kelvin. For an ideal gas at temperature T it is 1/T.",
+   "symbol": "\\beta=\\frac1T"
+  },
+  {
+   "term": "Kelvin-Helmholtz instability",
+   "meaning": "Two layers sliding past each other roll up into vortices. The interface between them is a vortex sheet.",
+   "symbol": ""
+  },
+  {
+   "term": "Passive dye",
+   "meaning": "A tracer that is carried by the flow and does not change it. In the plume the dye is also given a weight, which makes it slightly non-passive.",
+   "symbol": "\\partial_t c+u\\!\\cdot\\!\\nabla c=0"
+  }
+ ],
+ "remember": [
+  "Vorticity $\\omega=\\partial_xv-\\partial_yu$; in the workspace it is stored as the central difference $\\tfrac12(v_R-v_L-u_T+u_B)$, which is $h\\,\\omega$.",
+  "Confinement: $f_c=\\varepsilon\\,h\\,(N_y,\\,-N_x)\\,\\omega$ with $N=\\nabla|\\omega|/|\\nabla|\\omega||$. It adds energy; it does not conserve circulation. Here $\\varepsilon$ is the hero's value at 128 cells, rescaled by $N/128$ on this grid.",
+  "Buoyancy: $\\Delta v_y=\\Delta t\\,(b\\,T-w\\,c)$ with temperature $T$ and dye density $c$; Boussinesq for air: acceleration $=g\\,\\Delta T/T_0$.",
+  "Air near 300 K: 0.0327 m/s$^2$ per kelvin, so a gas 10 K warmer accelerates at 0.327 m/s$^2$ and one 100 K warmer at 3.27 m/s$^2$.",
+  "An ideal vortex sheet of velocity jump $\\Delta U$ grows with rate $\\sigma=k\\,\\Delta U/2$ at wavenumber $k$; a smooth shear layer of thickness $\\delta$ grows more slowly.",
+  "Numerical diffusion damps vorticity; confinement can put back more than it took (see the numbers below), so $\\varepsilon$ has to be tuned, never trusted."
+ ],
+ "understand": [
+  {
+   "title": "Easy: put the spin back",
+   "text": "Imagine stirring coffee: the swirls fade because the liquid is a little sticky. A simulation on a grid makes the liquid artificially sticky, so small swirls fade far too fast and the smoke looks like soft cloth. Vorticity confinement finds where the spinning is strongest and gives it a little push in the direction it is already spinning, a kind of anti-stickiness. Buoyancy is simpler: hot gas is lighter, so we push it up in proportion to its temperature."
+  },
+  {
+   "title": "Medium: the force in three steps",
+   "text": "Compute the vorticity $\\omega$. Find its magnitude $|\\omega|$ and the direction $N$ in which that magnitude grows: it points to the centre of the nearest vortex. The force is perpendicular to $N$ and proportional to $\\omega$, so it circles the centre in the sense of the spin: $f=\\varepsilon h\\,(N_y,-N_x)\\,\\omega$. The strength $\\varepsilon$ is a free parameter; the cell size $h$ in the formula makes the force go to zero as the grid is refined, as it should."
+  },
+  {
+   "title": "Hard: it fights diffusion, but it is not a conservation law",
+   "text": "Run the Shear layer scene for 100 steps with confinement 0, 3 and 6. The initial peak vorticity is 12.55 per second. After 100 steps (1.67 s) it is 10.34 without confinement (diffused), 29.0 with the slider at 3 and 49.2 at 6. An inviscid flow cannot raise the peak above its initial value in two dimensions, so the confined runs contain more vorticity than physics allows: confinement is an artistic force, which is the price for sharpness."
+  },
+  {
+   "title": "Hardest: what the numbers say about the instability and the plume",
+   "text": "An infinitely thin vortex sheet of velocity jump 1 and wavelength 0.5 (the scene's two waves) would grow at $\\sigma=k\\Delta U/2=6.28$ per second ($e$-folding time 0.159 s). The scene's shear layer has thickness 0.04 (kδ = 0.50) and the standard result for a tanh layer gives a maximum growth rate of about $0.19\\,U/\\delta=$2.37 per second (U = 0.5, δ = 0.04); the solver's growth of the largest cross-flow speed between 0.5 s and 1 s was 1.52, 2.32 and 1.54 per second for confinement 0, 3 and 6: the right order of magnitude, noisy because it is a two-point estimate of a growing mode that is still emerging. In the plume, the burner's temperature 0.82 with buoyancy 4.2 and dye weight 0.25 on dye 0.55 gives a net upward acceleration of 3.31 domain lengths per second squared; from rest the plume head would rise half a box in about 0.55 s if there were no drag, which is the right scale for what the scene shows."
+  }
+ ],
+ "steps": [
+  {
+   "title": "Vorticity from the velocity",
+   "tex": "\\omega=\\partial_xv-\\partial_yu\\ \\approx\\ \\frac{(v_R-v_L)-(u_T-u_B)}{2h}",
+   "note": "The workspace stores the numerator over two (central differences), which is $h\\,\\omega$. It is the same pass as the hero's curl shader.",
+   "live": null
+  },
+  {
+   "title": "Where is the vortex centre?",
+   "tex": "N=\\frac{\\nabla|\\omega|}{|\\nabla|\\omega||+10^{-4}},\\qquad \\nabla|\\omega|\\approx\\tfrac12\\big(|\\omega_R|-|\\omega_L|,\\ |\\omega_T|-|\\omega_B|\\big)",
+   "note": "The gradient of the vorticity magnitude points up the hill toward the strongest spin. The small constant keeps the division finite.",
+   "live": null
+  },
+  {
+   "title": "The confinement force",
+   "tex": "f_c=\\varepsilon\\,h\\,\\big(N_y,\\ -N_x\\big)\\,\\omega,\\qquad u\\leftarrow u+\\Delta t\\,f_c",
+   "note": "$N\\times\\omega\\hat z$ in two dimensions. It is tangent to the circles around the centre and its sign follows the spin, so it speeds the swirl up. Vorticity of either sign is treated alike.",
+   "live": "flow?preset=1&eps=6&view=vorticity"
+  },
+  {
+   "title": "Buoyancy from the Boussinesq model",
+   "tex": "\\rho=\\rho_0\\big(1-\\beta\\,\\Delta T\\big)\\ \\Rightarrow\\ f=\\beta\\,g\\,\\Delta T\\,\\hat y,\\qquad \\beta=\\frac1{T_0}",
+   "note": "For air at 300 K: 0.327 m/s$^2$ for a gas 10 K warmer. The workspace uses a dimensionless temperature and a free coefficient b.",
+   "live": null
+  },
+  {
+   "title": "The step in the workspace",
+   "tex": "v_y\\leftarrow v_y+\\Delta t\\,\\big(b\\,T-w\\,c\\big),\\qquad b=4.2,\\ w=0.25",
+   "note": "Temperature $T$ pulls the gas up, the dye density $c$ weighs it down, as in the hero's force shader.",
+   "live": "flow?preset=0"
+  },
+  {
+   "title": "Linear stability of a vortex sheet, for scale",
+   "tex": "\\sigma=\\frac{k\\,\\Delta U}{2}\\ \\ (\\text{thin sheet}),\\qquad \\sigma_{\\max}\\approx0.19\\,\\frac{U}{\\delta}\\ \\ (\\tanh\\ \\text{layer})",
+   "note": "The thin-sheet value is an upper bound for any thickness; a finite layer is slower and has a cut-off wavelength.",
+   "live": "flow?preset=1&eps=0"
+  }
+ ],
+ "apply": {
+  "worked": {
+   "title": "How fast does a hot parcel rise, and how long for the plume head?",
+   "problem": "Air near 300 K carries a parcel 10 K warmer than its surroundings. Find its initial upward acceleration with the Boussinesq model. Then, for the Smoke plume scene, find the net acceleration of the burner gas (temperature 0.82, dye 0.55, buoyancy 4.2, weight 0.25) and the time to rise half a box from rest without drag.",
+   "solution": [
+    {
+     "text": "Thermal expansion coefficient of an ideal gas, then the acceleration.",
+     "tex": "\\beta=\\frac1{300}\\ \\text{K}^{-1},\\quad a=g\\beta\\Delta T=9.81\\times\\frac{10}{300}=0.327\\ \\text{m/s}^2"
+    },
+    {
+     "text": "In the scene, add the buoyant and the weight terms.",
+     "tex": "a=bT-wc=4.2\\times0.82-0.25\\times0.55=3.3065"
+    },
+    {
+     "text": "Constant acceleration from rest covers a distance $\\tfrac12at^2$; set it to 0.5.",
+     "tex": "t=\\sqrt{\\frac{2\\times0.5}{3.3065}}=0.550\\ \\text{s}"
+    }
+   ],
+   "answer": "a = 0.327 m/s^2 for the 10 K parcel; in the scene a = 3.306 domain lengths per second squared and the rise time to half a box is 0.55 s, before drag and mixing slow it down."
+  },
+  "code": "import numpy as np\n\n# Boussinesq acceleration of a warm parcel in air, and the plume scene's net buoyancy\ng, T0 = 9.81, 300.0\nfor dT in (1, 10, 100):\n    print(f\"dT = {dT:>3} K: a = {g * dT / T0:.4f} m/s^2\")\nb, w, T, c = 4.2, 0.25, 0.82, 0.55\na = b * T - w * c\nprint(\"net acceleration in the scene:\", a, \" time to rise 0.5:\", np.sqrt(2 * 0.5 / a))\n\n# vortex-sheet growth rate for the scene's shear layer: jump 1, two waves in the box\nk = 2 * np.pi * 2\nprint(\"thin sheet sigma = k dU / 2 =\", k * 1.0 / 2, \" tanh layer max ~\", 0.1897 * 0.5 / 0.04)\n"
+ },
+ "analyze": [
+  {
+   "q": "Show that the confinement force is perpendicular to $N$, and explain why that makes it circle the vortex centre instead of pushing toward or away from it.",
+   "hint": "$f\\propto(N_y,-N_x)$; take the dot product with $N=(N_x,N_y)$."
+  },
+  {
+   "q": "The force scales with the cell size $h$. What would happen on a very fine grid if it did not, and why does that make the confinement a consistent modification?",
+   "hint": "As $h\\to0$ the numerical diffusion also goes to zero, so the correction should vanish too."
+  },
+  {
+   "q": "Why is the buoyancy of a dense, dye-heavy parcel handled by subtracting a weight term instead of letting the temperature alone do the job?",
+   "hint": "Smoke is denser than clean air at the same temperature; the dye term stands in for the extra mass."
+  }
+ ],
+ "evaluate": [
+  {
+   "q": "Confinement 6 raised the peak vorticity of the shear layer to 49 per second from an initial 12.6. A student argues that the simulation is more accurate because the vortices are sharper. Evaluate the argument.",
+   "hint": "In 2D inviscid flow the maximum of the vorticity cannot grow."
+  },
+  {
+   "q": "For which applications is confinement acceptable and for which not? Give one of each.",
+   "hint": "A film effect needs the right look; a measurement of the kinetic energy decay of turbulence needs the right physics."
+  }
+ ],
+ "create": [
+  "Design a test that separates the numerical vorticity loss of the scheme from the vorticity added by confinement, for example with a single vortex in a periodic box.",
+  "Propose a buoyancy model in which the temperature also diffuses and cools with height, and say which parameters you would add to the panel."
+ ],
+ "checks": [
+  {
+   "tier": "understand",
+   "q": "What does vorticity confinement do, and why is it needed?",
+   "hint": "Numerical diffusion.",
+   "answer": "It finds the local maxima of the vorticity magnitude and adds a force that circles around each one, strengthening the spin. It is needed because advection on a grid acts like an artificial viscosity that damps small vortices much too fast, so the simulated smoke looks smoother than real smoke."
+  },
+  {
+   "tier": "apply",
+   "q": "What is the Boussinesq acceleration of a parcel of air 10 K warmer than its surroundings at 300 K?",
+   "hint": "g beta dT with beta = 1/T.",
+   "answer": "a = 9.81 x 10 / 300 = 0.327 m/s^2."
+  },
+  {
+   "tier": "analyze",
+   "q": "After 1.67 s the shear layer's peak vorticity was 10.3, 29.0 and 49.2 per second for confinement 0, 3 and 6, starting from 12.6. Interpret the three numbers.",
+   "hint": "Compare each with the starting value.",
+   "answer": "Without confinement the grid has diffused the peak to 82 % of its initial value. With confinement the peak is 2.3 and 3.9 times the initial: more than the inviscid flow can keep, so the force is adding vorticity (partly by concentrating it as the layer rolls up, partly artificially)."
+  },
+  {
+   "tier": "evaluate",
+   "q": "A plume simulation looks right with confinement 3 on a 64 by 64 grid and too noisy on a 96 by 96 grid at the same slider value. Is something wrong with the code?",
+   "hint": "Compare the peak vorticity of the shear scene at the two resolutions with the same slider.",
+   "answer": "Not necessarily. The workspace rescales the hero's value by N/128, yet after 1.67 s the shear layer's peak vorticity at slider 3 was 29.0 per second at 64 cells and 40.9 at 96 cells: the response of the flow depends on the resolution. The honest procedure is to retune epsilon per resolution and to treat it as a visual parameter, never as a physical constant."
+  },
+  {
+   "tier": "create",
+   "q": "Design an experiment in the Flow workspace that shows confinement adds energy, not just sharpness.",
+   "hint": "Watch the kinetic energy in the Dashboard.",
+   "answer": "Use the Shear layer scene with viscosity and dissipation at 0 and compare the kinetic energy readout after the same time for confinement 0, 3 and 6. The solver gave 0.1152 to 0.1129 (a loss of 2.0 %) without confinement, 0.1153 to 0.1159 at 3 and 0.1154 to 0.1199 at 6 (a gain of 3.9 %). An inviscid periodic flow cannot gain energy, so the gain is what the force added."
+  }
+ ],
+ "values": [
+  {
+   "label": "Ideal-gas thermal expansion coefficient at 300 K",
+   "value": "0.00333 per K",
+   "from": "1/T"
+  },
+  {
+   "label": "Boussinesq acceleration for 1 K, 10 K and 100 K warmer (g = 9.81)",
+   "value": "0.0327, 0.327, 3.27 m/s^2",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Plume scene: net acceleration b T - w c (4.2 x 0.82 - 0.25 x 0.55)",
+   "value": "3.3065",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Plume scene: time to rise 0.5 from rest without drag",
+   "value": "0.550 s",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Shear layer: initial peak vorticity",
+   "value": "12.55 per s",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "Peak vorticity after 100 steps: confinement 0, 3, 6",
+   "value": "10.34, 29.02, 49.20 per s",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js), N = 64, dt = 1/60 s, 40 pressure iterations"
+  },
+  {
+   "label": "Kinetic energy, first step to step 100: confinement 0, 3, 6",
+   "value": "0.1152 to 0.1129; 0.1153 to 0.1159; 0.1154 to 0.1199",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js), N = 64"
+  },
+  {
+   "label": "Peak vorticity after 100 steps, confinement 3, at N = 96",
+   "value": "40.9 per s",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js), N = 96"
+  },
+  {
+   "label": "Enstrophy per cell after 100 steps: confinement 0, 3, 6",
+   "value": "0.00163, 0.00302, 0.00654",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js) (vorticity in per-cell units)"
+  },
+  {
+   "label": "Thin vortex-sheet growth rate k dU / 2 (dU = 1, wavelength 0.5)",
+   "value": "6.283 per s",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "tanh-layer maximum growth rate 0.1897 U / delta (U = 0.5, delta = 0.04)",
+   "value": "2.371 per s",
+   "from": "tools/flow_numbers.py (numpy / sympy) (standard linear-stability coefficient)"
+  },
+  {
+   "label": "Measured growth of max |v|, 0.5 s to 1 s, confinement 0, 3, 6",
+   "value": "1.52, 2.32, 1.54 per s",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js) (a two-point estimate, noisy)"
+  },
+  {
+   "label": "Effective confinement at N = 64 for the slider value 3",
+   "value": "1.5",
+   "from": "3 x N / 128"
+  }
+ ],
+ "live": [
+  {
+   "route": "flow?preset=0",
+   "label": "Flow: smoke plume, confinement 3",
+   "static_ok": true
+  },
+  {
+   "route": "flow?preset=0&eps=0",
+   "label": "Flow: smoke plume, confinement off",
+   "static_ok": true
+  },
+  {
+   "route": "flow?preset=1&eps=6&view=vorticity",
+   "label": "Flow: shear layer, vorticity, confinement 6",
+   "static_ok": true
+  }
+ ],
+ "related": [
+  "concept.flow.advection-and-numerical-diffusion",
+  "concept.flow.navier-stokes-and-incompressibility",
+  "concept.laminar-flames-flame-speed-and-extinction"
+ ],
+ "cite": [
+  "white2011"
+ ],
+ "provenance": {
+  "author": "agent (Claude), WP-A2",
+  "opened_image": "media/flow/flow-plume_dark.webp",
+  "reviewed_by_owner": false,
+  "date": "2026-10-06"
+ }
+}

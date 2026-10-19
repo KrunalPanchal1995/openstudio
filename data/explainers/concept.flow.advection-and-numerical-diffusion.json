@@ -1,0 +1,309 @@
+{
+ "id": "concept.flow.advection-and-numerical-diffusion",
+ "type": "concept",
+ "status": "full",
+ "title": "Semi-Lagrangian advection never blows up, but every step blurs: the interpolation is a hidden diffusion",
+ "summary": "Stam's advection traces each cell back along the velocity and copies the value found there. It is stable for any time step because it only averages, but linear interpolation averages neighbours and so smears sharp features exactly like a diffusion with a known coefficient. MacCormack's correction removes most of the blur and a clamp keeps it from overshooting.",
+ "subjects": [
+  "cfd-numerics"
+ ],
+ "media": {
+  "kind": "image",
+  "src": "media/flow/flow-shear_dark.webp",
+  "src_light": "media/flow/flow-shear_light.webp",
+  "alt": "Flow workspace, scene Shear layer, dye view: a teal upper half and a dark lower half joined by two spiral roll-ups along a wavy interface.",
+  "caption": "Screenshot of the Flow workspace (scene 1, dye view) after 1.7 s: the Kelvin-Helmholtz roll-up of a shear layer, advected with MacCormack."
+ },
+ "source": {
+  "note": "Standard theory (Chorin's projection method, Stam's stable fluids, Fedkiw, Stam and Jensen's vorticity confinement, Jacobi and conjugate-gradient iteration). No project result is quoted. Every number on this page was computed with numpy / sympy or measured on the Flow workspace's own solver by tools/flow_numbers.py and tools/flow_numbers.mjs, and the picture is a screenshot of that workspace."
+ },
+ "plot_classes": [],
+ "read_the_figure": {
+  "question": "How sharp is the interface after the fluid has been moved around for a while, and how much of the smoothing is numerical?",
+  "axes": "The picture is the simulation box, x to the right and y up. Colour is the passive dye: teal where the dye is, dark where it is not. The dye does not act on the flow; it only makes the motion visible.",
+  "look_at": [
+   "The width of the edge between teal and dark: it should be a few cells, not tens of cells.",
+   "Whether the spirals are crisp or have dissolved: numerical diffusion dissolves them first.",
+   "Overshoot: dye brighter than the original teal or darker than none would be a sign of a scheme without a clamp."
+  ],
+  "proves": "That the scheme keeps fine structure for the simulated time; the sharpness belongs to the scheme and the grid, not to the physics, because the dye here has no diffusion of its own.",
+  "if_wrong": [
+   "Reading a smooth blob as physical mixing when it is the interpolation's diffusion.",
+   "Comparing two runs with different grids or time steps and calling the sharper one more accurate without checking mass."
+  ],
+  "must_check": [
+   "Grid size and time step (the blur per step depends on both).",
+   "The advection scheme (semi-Lagrangian or MacCormack).",
+   "Whether a clamp was applied."
+  ]
+ },
+ "terms": [
+  {
+   "term": "Advection",
+   "meaning": "Transport of a quantity by the flow, with no change to the quantity itself: the quantity is constant along a path of the fluid.",
+   "symbol": "\\partial_t q+u\\!\\cdot\\!\\nabla q=0"
+  },
+  {
+   "term": "Semi-Lagrangian step",
+   "meaning": "For each grid cell, trace the path backward over one time step, read the old field there by interpolation, and write it into the cell.",
+   "symbol": "q^{n+1}(x)=q^n\\big(x-\\Delta t\\,u(x)\\big)"
+  },
+  {
+   "term": "Interpolation weight",
+   "meaning": "The fractional part of the shift in cells. Linear interpolation mixes the two neighbouring cells with weights $1-\\alpha$ and $\\alpha$.",
+   "symbol": "\\alpha=\\tfrac{u\\Delta t}{h}-\\lfloor\\tfrac{u\\Delta t}{h}\\rfloor"
+  },
+  {
+   "term": "CFL number",
+   "meaning": "How many cells the flow crosses in one step. Explicit upwind schemes need it at most 1; the semi-Lagrangian step has no such limit but loses accuracy when it exceeds 1.",
+   "symbol": "\\mathrm{CFL}=\\frac{|u|\\Delta t}{h}"
+  },
+  {
+   "term": "Numerical diffusion",
+   "meaning": "Smoothing that comes from the scheme, not from the equation. It acts like a diffusion with a coefficient that depends on h, the shift and the time step.",
+   "symbol": "\\nu_{\\text{num}}"
+  },
+  {
+   "term": "Amplification factor",
+   "meaning": "The factor by which one step multiplies a Fourier mode. A scheme is stable when it never exceeds 1 in size.",
+   "symbol": "g(\\theta)"
+  },
+  {
+   "term": "MacCormack correction",
+   "meaning": "Advect forward, advect the result backward, and add half of the difference from the start: a second-order estimate of the error to cancel.",
+   "symbol": "q^{n+1}=\\hat q+\\tfrac12(q^n-\\hat{\\hat q})"
+  },
+  {
+   "term": "Limiter (clamp)",
+   "meaning": "Restricting the corrected value to the range of the four cells it was interpolated from, so that no new maxima or minima are created.",
+   "symbol": "\\min\\le q\\le\\max"
+  }
+ ],
+ "remember": [
+  "Semi-Lagrangian: $q^{n+1}_i=(1-\\alpha)\\,q^n_{i-m}+\\alpha\\,q^n_{i-m-1}$ for a shift of $m+\\alpha$ cells. Always a convex combination, so $\\max|q|$ never grows.",
+  "Fourier mode $e^{i\\theta j}$: $|g|^2=1-2\\alpha(1-\\alpha)(1-\\cos\\theta)\\le1$. A two-cell wave ($\\theta=\\pi$) is multiplied by $|1-2\\alpha|$: at $\\alpha=\\tfrac12$ it vanishes in one step.",
+  "Variance of a smeared profile grows by $\\alpha(1-\\alpha)h^2$ per step, which is a diffusion $\\nu_{\\text{num}}=\\alpha(1-\\alpha)h^2/(2\\Delta t)$.",
+  "The blur does not depend on the whole shift but only on its fractional part $\\alpha$, and it is zero for a whole-cell shift.",
+  "MacCormack with the clamp is second order where the field is smooth and falls back to a first-order step at extrema."
+ ],
+ "understand": [
+  {
+   "title": "Easy: copying from where you came from",
+   "text": "Imagine each cell asking: where was the water that is here now one moment ago? The answer is a point between cells, so the cell takes a blend of its neighbours' old values. That never makes a number bigger than anything it blended, so nothing explodes. But blending sharp edges rounds them off, every step, and many steps smear a crisp line into a soft ramp."
+  },
+  {
+   "title": "Medium: the blend is a diffusion",
+   "text": "Shift a profile by half a cell with linear interpolation: each new value is half of one old cell plus half of the next. A spike of height one becomes two cells of one half. The spread, measured as variance, grows by $\\alpha(1-\\alpha)h^2=\\tfrac14h^2$ per step. That is the spread of a diffusion with coefficient 0.000814 (lengths squared per second) for a 96-cell grid and a step of 1/60 s, about 41 % of the viscosity 0.002 of the cavity scene. The numerical diffusion is not small compared with the physical one."
+  },
+  {
+   "title": "Hard: stable, but not accurate; MacCormack buys the accuracy back",
+   "text": "The amplification factor of the linear-interpolation step never exceeds one in size for any $\\alpha$ (a scan over $\\alpha$ and $\\theta$ gives 1), which is why the method is unconditionally stable. Running the real solver for 100 steps with a half-cell shift, a Gaussian of width 3 cells grew to 5.831 cells (theory 5.831) and its peak fell from 1 to 0.514. With MacCormack and the clamp the width was 3.53 cells and the peak 0.83. The price is that the mass is no longer exactly conserved: it rose by 1.0 % in that run."
+  },
+  {
+   "title": "Hardest: advection is also how the velocity damps itself",
+   "text": "The velocity is advected by itself, so the same blur acts on the momentum: it is an artificial viscosity that grows with $h$ and has nothing to do with the physical $\\nu$. In a Kelvin-Helmholtz roll-up the blur thickens the shear layer and slows the instability; in a vortex street it can erase the street altogether. That is why vorticity confinement exists (next page): it puts back the small rotation that the interpolation took away. A scheme that is both stable and sharp needs to know where the field is smooth, which is what the clamp does in a crude way."
+  }
+ ],
+ "steps": [
+  {
+   "title": "State the transport equation",
+   "tex": "\\partial_t q+u\\!\\cdot\\!\\nabla q=0\\ \\Longleftrightarrow\\ \\frac{dq}{dt}=0\\ \\text{along}\\ \\frac{dx}{dt}=u(x,t)",
+   "note": "q is constant along a path. The exact answer is q at the foot of the path.",
+   "live": null
+  },
+  {
+   "title": "Semi-Lagrangian step",
+   "tex": "q^{n+1}(x)=q^n\\big(x-\\Delta t\\,u(x)\\big)",
+   "note": "One backward step of the path equation. The value is read from the old field by interpolation.",
+   "live": null
+  },
+  {
+   "title": "Linear interpolation in one dimension",
+   "tex": "q^{n+1}_i=(1-\\alpha)\\,q^n_{i-m}+\\alpha\\,q^n_{i-m-1},\\qquad \\frac{u\\Delta t}{h}=m+\\alpha",
+   "note": "A convex combination: stable. All the blur sits in the fractional part $\\alpha$.",
+   "live": null
+  },
+  {
+   "title": "Amplification factor of a Fourier mode",
+   "tex": "g(\\theta)=(1-\\alpha)+\\alpha e^{-i\\theta},\\qquad |g|^2=1-2\\alpha(1-\\alpha)(1-\\cos\\theta)",
+   "note": "Insert $q_j=e^{ij\\theta}$ and take the modulus squared. Never above 1, smallest for the shortest waves.",
+   "live": null
+  },
+  {
+   "title": "Read off the numerical diffusion",
+   "tex": "\\mathrm{Var}\\,q\\ \\text{grows by}\\ \\alpha(1-\\alpha)h^2\\ \\text{per step}\\ \\Rightarrow\\ \\nu_{\\text{num}}=\\frac{\\alpha(1-\\alpha)\\,h^2}{2\\,\\Delta t}",
+   "note": "A diffusion equation spreads variance by $2\\nu t$. Equate the two.",
+   "live": "flow?preset=1&adv=sl&eps=0"
+  },
+  {
+   "title": "Correct it: MacCormack with a clamp",
+   "tex": "\\hat q=\\mathcal A_{\\Delta t}q^n,\\quad \\hat{\\hat q}=\\mathcal A_{-\\Delta t}\\hat q,\\quad q^{n+1}=\\mathrm{clamp}\\big(\\hat q+\\tfrac12(q^n-\\hat{\\hat q})\\big)",
+   "note": "Going forward and back should return the start; the difference estimates the error. Half of it is added back, then the result is held inside the local range.",
+   "live": "flow?preset=1&adv=mac&eps=0"
+  }
+ ],
+ "apply": {
+  "worked": {
+   "title": "How much does a half-cell shift blur a Gaussian in 100 steps?",
+   "problem": "A Gaussian of standard deviation 3 cells is advected at a constant speed that moves it half a cell per step (alpha = 1/2), with semi-Lagrangian linear interpolation. What is its standard deviation after 100 steps, and what is the equivalent diffusion coefficient on a 96-cell grid with a step of 1/60 s?",
+   "solution": [
+    {
+     "text": "Each step spreads the variance by $\\alpha(1-\\alpha)$ cells squared.",
+     "tex": "\\Delta\\sigma^2=\\tfrac12\\cdot\\tfrac12=0.25\\ \\text{cells}^2"
+    },
+    {
+     "text": "After 100 steps the variance is the initial one plus 100 times that.",
+     "tex": "\\sigma^2=9+100\\times0.25=34"
+    },
+    {
+     "text": "Take the square root.",
+     "tex": "\\sigma=\\sqrt{34}=5.831\\ \\text{cells}"
+    },
+    {
+     "text": "Equivalent diffusion: $2\\nu_{\\text{num}}t$ equals the added variance $25\\,h^2$ over $t=100/60$ s, with $h=1/96$.",
+     "tex": "\\nu_{\\text{num}}=\\frac{0.25\\,h^2}{2\\,\\Delta t}=\\frac{0.25/9216}{2/60}=8.14\\times10^{-4}"
+    }
+   ],
+   "answer": "sigma = 5.831 cells, and nu_num = 0.000814 lengths squared per second. The Flow solver, run for exactly this case, gave sigma = 5.831."
+  },
+  "code": "import numpy as np\n\n# semi-Lagrangian linear interpolation of a Gaussian, periodic row of 96 cells, shift alpha = 0.5 cell per step\nN, alpha, steps = 96, 0.5, 100\ni = np.arange(N)\nq = np.exp(-((i - 12) ** 2) / (2 * 3.0 ** 2))\nfor _ in range(steps):\n    q = (1 - alpha) * q + alpha * np.roll(q, 1)      # q_new[i] = (1-a) q[i] + a q[i-1]  (a pure sub-cell shift)\nmean = np.sum(i * q) / np.sum(q)\nsigma = np.sqrt(np.sum(q * (i - mean) ** 2) / np.sum(q))\nprint(\"sigma after\", steps, \"steps:\", sigma, \" theory:\", np.sqrt(9 + steps * alpha * (1 - alpha)))\nprint(\"peak:\", q.max(), \" mass ratio:\", q.sum() / np.exp(-((i - 12) ** 2) / 18).sum())\n"
+ },
+ "analyze": [
+  {
+   "q": "Why is the semi-Lagrangian step stable for any time step, even for a CFL number of 10?",
+   "hint": "Write the new value as a combination of old values and look at the weights. What can a convex combination do to the maximum?"
+  },
+  {
+   "q": "A whole-cell shift ($\\alpha=0$) produces no blur at all. Explain why a grid-aligned flow looks sharper than a diagonal one at the same speed.",
+   "hint": "Look at the fractional part of the shift in x and in y separately. A diagonal flow almost never has both equal to zero."
+  },
+  {
+   "q": "Using $\\nu_{\\text{num}}=\\alpha(1-\\alpha)h^2/(2\\Delta t)$, how does the blur change when you halve the time step at fixed speed and grid?",
+   "hint": "The shift per step halves, so $\\alpha$ changes, and so does the number of steps to reach the same time. Work out the variance gained over one fixed time."
+  }
+ ],
+ "evaluate": [
+  {
+   "q": "Compare semi-Lagrangian and MacCormack for a smoke simulation in which the smoke has sharp edges and for a simulation in which mass must be exactly conserved. Which would you choose for each, and why?",
+   "hint": "MacCormack with the clamp is sharper but not conservative: the mass run on this page rose by about one percent."
+  },
+  {
+   "q": "A colleague doubles the grid resolution to reduce the blur but leaves the time step unchanged. Does the numerical diffusion in physical units fall by a factor 4?",
+   "hint": "Check how the fractional shift $\\alpha$ changes when $h$ halves at fixed speed and $\\Delta t$."
+  }
+ ],
+ "create": [
+  "Design a test that measures the numerical diffusion of the workspace's advection for the velocity field itself (not a dye). What would you advect and what would you measure?",
+  "Propose a limiter that is less crude than the four-cell clamp, for example one that checks the sign of the correction. What would you test it on?"
+ ],
+ "checks": [
+  {
+   "tier": "understand",
+   "q": "In one sentence each: why does the semi-Lagrangian step never blow up, and why does it blur?",
+   "hint": "Convex combination.",
+   "answer": "It never blows up because every new value is an average of old values with weights between 0 and 1, so no value can exceed the old maximum. It blurs because averaging two neighbouring cells is exactly what a diffusion does, and the fractional part of the shift decides how much is mixed."
+  },
+  {
+   "tier": "apply",
+   "q": "A Gaussian of width 3 cells is shifted half a cell per step for 100 steps. What width does linear interpolation leave, in cells?",
+   "hint": "Variance grows by alpha (1 - alpha) per step.",
+   "answer": "sigma = sqrt(9 + 100 x 0.25) = 5.831 cells; the Flow solver measured 5.831."
+  },
+  {
+   "tier": "analyze",
+   "q": "In the Flow solver, the same run with MacCormack and the clamp ends with width 3.53 cells and peak 0.83, while semi-Lagrangian ends with 5.83 and 0.514. Why is the MacCormack peak still below 1?",
+   "hint": "The clamp holds the result inside the range of the four cells it came from.",
+   "answer": "A peak is a local maximum, and the clamp limits the corrected value to the range of the surrounding old values, so near the peak the scheme falls back toward the first-order step. The correction cancels the blur away from the extremum but cannot restore the original height there."
+  },
+  {
+   "tier": "evaluate",
+   "q": "MacCormack with the clamp is sharper but its mass changed by about one percent in the test. Is that acceptable for a smoke hero? For a combustion simulation?",
+   "hint": "What does each simulation do with the dye or the scalar?",
+   "answer": "For a visual effect where the dye only makes the flow visible, a one percent drift is invisible and the sharper picture is worth it. For a combustion or species-transport simulation, mass of a species is a physical quantity: use a conservative scheme (a flux-form finite-volume scheme) even though it costs a time-step limit."
+  },
+  {
+   "tier": "create",
+   "q": "Design an experiment in the Flow workspace that shows numerical diffusion in the velocity, not just in the dye.",
+   "hint": "Start from a shear layer, switch off confinement and viscosity.",
+   "answer": "Use the Shear layer scene with confinement 0, viscosity 0 and velocity dissipation 0, and watch the vorticity view: the vorticity peak falls although nothing physical diffuses it. Repeat with semi-Lagrangian and with MacCormack, and at 32, 64 and 96 cells: the peak after a fixed time measures the artificial viscosity of each combination."
+  }
+ ],
+ "values": [
+  {
+   "label": "Semi-Lagrangian, half-cell shift, 100 steps: Gaussian width (initial 3 cells)",
+   "value": "5.8307 cells",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js), N = 96"
+  },
+  {
+   "label": "Same, theory sqrt(9 + 100 x 0.25)",
+   "value": "5.831 cells",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Same, peak height (initial 1)",
+   "value": "0.5138",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "MacCormack with the clamp, half-cell shift: width and peak",
+   "value": "3.526 cells and 0.8302",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "Quarter-cell shift, semi-Lagrangian: width (theory sqrt(9 + 100 x 0.1875) = 5.2678)",
+   "value": "5.2676 cells",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "Mass change after 100 steps: semi-Lagrangian, MacCormack",
+   "value": "0.000 %, 1.00 %",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js) against the analytic sum"
+  },
+  {
+   "label": "Numerical diffusion, alpha = 1/2, h = 1/96, dt = 1/60 s",
+   "value": "0.0008138",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Check: 2 nu t in cells squared after 100 steps",
+   "value": "25",
+   "from": "tools/flow_numbers.py (numpy / sympy) (equals 100 x 0.25)"
+  },
+  {
+   "label": "Largest |g| over alpha in [0,1] and theta in [0,pi]",
+   "value": "1",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "CFL of the hero stream (0.36 per s) on 128 and on 64 cells, dt = 1/60 s",
+   "value": "0.768 and 0.384",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  }
+ ],
+ "live": [
+  {
+   "route": "flow?preset=1&adv=sl&eps=0",
+   "label": "Flow: shear layer, semi-Lagrangian, no confinement",
+   "static_ok": true
+  },
+  {
+   "route": "flow?preset=1&adv=mac&eps=0",
+   "label": "Flow: shear layer, MacCormack, no confinement",
+   "static_ok": true
+  }
+ ],
+ "related": [
+  "concept.flow.vorticity-confinement-and-buoyancy",
+  "concept.flow.navier-stokes-and-incompressibility",
+  "figure.cfdcore.scheme-stability-and-diffusion"
+ ],
+ "cite": [
+  "courant1928"
+ ],
+ "provenance": {
+  "author": "agent (Claude), WP-A2",
+  "opened_image": "media/flow/flow-shear_dark.webp",
+  "reviewed_by_owner": false,
+  "date": "2026-10-06"
+ }
+}

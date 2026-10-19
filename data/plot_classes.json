@@ -1,0 +1,2421 @@
+{
+ "plots": [
+  {
+   "id": "F1.1",
+   "name": "Curve family over a parameter",
+   "asks": "How does the curve move as the parameter changes?",
+   "data": "y(x; p) for several p",
+   "must": [
+    "one colour per p",
+    "legend or direct labels",
+    "marked special p"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S007",
+    "S008"
+   ],
+   "family": "F1",
+   "family_name": "Functions and relations",
+   "dark": "explain/img/plot/F1.1_dark.webp",
+   "light": "explain/img/plot/F1.1_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F1.1",
+   "live": []
+  },
+  {
+   "id": "F1.2",
+   "name": "Function plus derivative panel",
+   "asks": "Where is it steep, flat, singular?",
+   "data": "f, f' on shared x",
+   "must": [
+    "shared x axis",
+    "numerical-check dots"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S003",
+    "node-course"
+   ],
+   "family": "F1",
+   "family_name": "Functions and relations",
+   "dark": "explain/img/plot/F1.2_dark.webp",
+   "light": "explain/img/plot/F1.2_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F1.2",
+   "live": []
+  },
+  {
+   "id": "F1.3",
+   "name": "Parametric and polar curve",
+   "asks": "What path does it trace?",
+   "data": "x(t), y(t) or r(theta)",
+   "must": [
+    "equal aspect",
+    "direction coloring"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course",
+    "node-course"
+   ],
+   "family": "F1",
+   "family_name": "Functions and relations",
+   "dark": "explain/img/plot/F1.3_dark.webp",
+   "light": "explain/img/plot/F1.3_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F1.3",
+   "live": []
+  },
+  {
+   "id": "F1.4",
+   "name": "Piecewise or kink curve",
+   "asks": "Where does it switch regime?",
+   "data": "f(x) with breakpoints",
+   "must": [
+    "marked breakpoints"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S007"
+   ],
+   "family": "F1",
+   "family_name": "Functions and relations",
+   "dark": "explain/img/plot/F1.4_dark.webp",
+   "light": "explain/img/plot/F1.4_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F1.4",
+   "live": []
+  },
+  {
+   "id": "F1.5",
+   "name": "Envelope and decay with time constants",
+   "asks": "How fast does it relax?",
+   "data": "y(t)",
+   "must": [
+    "tau markers",
+    "envelope"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S008"
+   ],
+   "family": "F1",
+   "family_name": "Functions and relations",
+   "dark": "explain/img/plot/F1.5_dark.webp",
+   "light": "explain/img/plot/F1.5_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F1.5",
+   "live": []
+  },
+  {
+   "id": "F1.6",
+   "name": "Log, semi-log, log-log, symlog view",
+   "asks": "Does it follow a power or exponential law?",
+   "data": "any positive y",
+   "must": [
+    "fitted slope printed",
+    "symlog linthresh stated"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S008",
+    "S010",
+    "node-course"
+   ],
+   "family": "F1",
+   "family_name": "Functions and relations",
+   "dark": "explain/img/plot/F1.6_dark.webp",
+   "light": "explain/img/plot/F1.6_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F1.6",
+   "live": [
+    {
+     "route": "atlas?ch=S96&ex=4",
+     "label": "Standard plots: log views"
+    }
+   ]
+  },
+  {
+   "id": "F1.7",
+   "name": "Implicit curve and level set",
+   "asks": "Where is f(x,y)=c?",
+   "data": "scalar field on grid",
+   "must": [
+    "labelled levels",
+    "highlighted critical level"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course 3D modulus level-one contour"
+   ],
+   "family": "F1",
+   "family_name": "Functions and relations",
+   "dark": "explain/img/plot/F1.7_dark.webp",
+   "light": "explain/img/plot/F1.7_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F1.7",
+   "live": []
+  },
+  {
+   "id": "F1.8",
+   "name": "Dimensionless universal curve collapse",
+   "asks": "Do different cases collapse onto one curve?",
+   "data": "scaled variables, several cases",
+   "must": [
+    "cases distinguished by marker"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S008"
+   ],
+   "family": "F1",
+   "family_name": "Functions and relations",
+   "dark": "explain/img/plot/F1.8_dark.webp",
+   "light": "explain/img/plot/F1.8_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F1.8",
+   "live": []
+  },
+  {
+   "id": "F2.1",
+   "name": "Region before and after a map",
+   "asks": "How are areas and shapes changed?",
+   "data": "region + map",
+   "must": [
+    "same colouring on both sides",
+    "Jacobian note"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course"
+   ],
+   "family": "F2",
+   "family_name": "Geometry and transformations",
+   "dark": "explain/img/plot/F2.1_dark.webp",
+   "light": "explain/img/plot/F2.1_light.webp",
+   "subjects": [
+    "geometry"
+   ],
+   "explainer": "plot.F2.1",
+   "live": []
+  },
+  {
+   "id": "F2.2",
+   "name": "Deformed grid",
+   "asks": "Where does the coordinate system stretch or fold?",
+   "data": "map on grid",
+   "must": [
+    "original grid ghosted",
+    "fold locations marked"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F2",
+   "family_name": "Geometry and transformations",
+   "dark": "explain/img/plot/F2.2_dark.webp",
+   "light": "explain/img/plot/F2.2_light.webp",
+   "subjects": [
+    "geometry"
+   ],
+   "explainer": "plot.F2.2",
+   "live": []
+  },
+  {
+   "id": "F2.3",
+   "name": "Jacobian determinant and condition heatmap",
+   "asks": "Where is the map singular or ill-conditioned?",
+   "data": "det J, cond J on grid",
+   "must": [
+    "diverging cmap centred on 1 or 0",
+    "log scale for cond"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course determinant heatmap"
+   ],
+   "family": "F2",
+   "family_name": "Geometry and transformations",
+   "dark": "explain/img/plot/F2.3_dark.webp",
+   "light": "explain/img/plot/F2.3_light.webp",
+   "subjects": [
+    "geometry"
+   ],
+   "explainer": "plot.F2.3",
+   "live": []
+  },
+  {
+   "id": "F2.4",
+   "name": "Vector field and flow lines",
+   "asks": "Which way does the flow go?",
+   "data": "v(x) on grid",
+   "must": [
+    "arrow scale legend",
+    "streamlines for global topology"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course",
+    "math-course S002"
+   ],
+   "family": "F2",
+   "family_name": "Geometry and transformations",
+   "dark": "explain/img/plot/F2.4_dark.webp",
+   "light": "explain/img/plot/F2.4_light.webp",
+   "subjects": [
+    "geometry"
+   ],
+   "explainer": "plot.F2.4",
+   "live": []
+  },
+  {
+   "id": "F2.5",
+   "name": "Cyclic-colormap angle field",
+   "asks": "How does phase or direction vary?",
+   "data": "angle on grid",
+   "must": [
+    "cyclic cmap only",
+    "colour wheel key"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F2",
+   "family_name": "Geometry and transformations",
+   "dark": "explain/img/plot/F2.5_dark.webp",
+   "light": "explain/img/plot/F2.5_light.webp",
+   "subjects": [
+    "geometry"
+   ],
+   "explainer": "plot.F2.5",
+   "live": []
+  },
+  {
+   "id": "F2.6",
+   "name": "Chart switching and atlas overlap",
+   "asks": "Where do charts cover and where do they fail?",
+   "data": "several charts of one manifold",
+   "must": [
+    "overlap shown",
+    "boundary labelled"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course companion projective chart switching"
+   ],
+   "family": "F2",
+   "family_name": "Geometry and transformations",
+   "dark": "explain/img/plot/F2.6_dark.webp",
+   "light": "explain/img/plot/F2.6_light.webp",
+   "subjects": [
+    "geometry"
+   ],
+   "explainer": "plot.F2.6",
+   "live": []
+  },
+  {
+   "id": "F2.7",
+   "name": "Metric ellipse field (Riemannian tensor glyphs)",
+   "asks": "How does local distance scale vary?",
+   "data": "metric tensor on grid",
+   "must": [
+    "ellipse scale legend"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F2",
+   "family_name": "Geometry and transformations",
+   "dark": "explain/img/plot/F2.7_dark.webp",
+   "light": "explain/img/plot/F2.7_light.webp",
+   "subjects": [
+    "geometry"
+   ],
+   "explainer": "plot.F2.7",
+   "live": []
+  },
+  {
+   "id": "F3.1",
+   "name": "Riemann rectangles and convergence",
+   "asks": "How does the sum approach the integral?",
+   "data": "f, partition",
+   "must": [
+    "n shown",
+    "error log-log with slope"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S010"
+   ],
+   "family": "F3",
+   "family_name": "Calculus constructions",
+   "dark": "explain/img/plot/F3.1_dark.webp",
+   "light": "explain/img/plot/F3.1_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F3.1",
+   "live": []
+  },
+  {
+   "id": "F3.2",
+   "name": "Integrand with signed shading",
+   "asks": "What is positive and negative area?",
+   "data": "f(x)",
+   "must": [
+    "sign colours: teal positive",
+    "rose negative"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course"
+   ],
+   "family": "F3",
+   "family_name": "Calculus constructions",
+   "dark": "explain/img/plot/F3.2_dark.webp",
+   "light": "explain/img/plot/F3.2_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F3.2",
+   "live": []
+  },
+  {
+   "id": "F3.3",
+   "name": "Slice or shell decomposition with A(x)",
+   "asks": "How is the solid built up?",
+   "data": "solid, cut direction",
+   "must": [
+    "current slice in amber",
+    "A(x) curve linked"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S010",
+    "Math Studio revolve"
+   ],
+   "family": "F3",
+   "family_name": "Calculus constructions",
+   "dark": "explain/img/plot/F3.3_dark.webp",
+   "light": "explain/img/plot/F3.3_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F3.3",
+   "live": []
+  },
+  {
+   "id": "F3.4",
+   "name": "Double-integral region cut two ways",
+   "asks": "Does order of integration matter?",
+   "data": "region",
+   "must": [
+    "both strip directions",
+    "limits labelled"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course"
+   ],
+   "family": "F3",
+   "family_name": "Calculus constructions",
+   "dark": "explain/img/plot/F3.4_dark.webp",
+   "light": "explain/img/plot/F3.4_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F3.4",
+   "live": []
+  },
+  {
+   "id": "F3.5",
+   "name": "Solid of revolution with cut-away",
+   "asks": "What does it look like inside?",
+   "data": "profile curve + axis",
+   "must": [
+    "axis in rose",
+    "cut-away plane"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course",
+    "Math Studio"
+   ],
+   "family": "F3",
+   "family_name": "Calculus constructions",
+   "dark": "explain/img/plot/F3.5_dark.webp",
+   "light": "explain/img/plot/F3.5_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F3.5",
+   "live": []
+  },
+  {
+   "id": "F3.6",
+   "name": "Circles of curvature and osculating frames",
+   "asks": "How much does the path bend here?",
+   "data": "curve",
+   "must": [
+    "radius arrows",
+    "frames at several points"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S004"
+   ],
+   "family": "F3",
+   "family_name": "Calculus constructions",
+   "dark": "explain/img/plot/F3.6_dark.webp",
+   "light": "explain/img/plot/F3.6_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F3.6",
+   "live": []
+  },
+  {
+   "id": "F3.7",
+   "name": "Taylor and series approximation fan",
+   "asks": "How good is the approximation and where?",
+   "data": "f, partial sums",
+   "must": [
+    "order labelled",
+    "validity radius marked"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F3",
+   "family_name": "Calculus constructions",
+   "dark": "explain/img/plot/F3.7_dark.webp",
+   "light": "explain/img/plot/F3.7_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F3.7",
+   "live": []
+  },
+  {
+   "id": "F3.8",
+   "name": "Convergence region of a series in the complex plane",
+   "asks": "Where does it converge?",
+   "data": "series",
+   "must": [
+    "boundary marked"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F3",
+   "family_name": "Calculus constructions",
+   "dark": "explain/img/plot/F3.8_dark.webp",
+   "light": "explain/img/plot/F3.8_light.webp",
+   "subjects": [
+    "calc-transform"
+   ],
+   "explainer": "plot.F3.8",
+   "live": []
+  },
+  {
+   "id": "F4.1",
+   "name": "Free-body and force diagram",
+   "asks": "Which forces act?",
+   "data": "forces",
+   "must": [
+    "arrow length to scale or stated",
+    "colour per force type"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S007"
+   ],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.1_dark.webp",
+   "light": "explain/img/plot/F4.1_light.webp",
+   "subjects": [
+    "stiff-sciml",
+    "geometry"
+   ],
+   "explainer": "plot.F4.1",
+   "live": []
+  },
+  {
+   "id": "F4.2",
+   "name": "Mechanism at several positions",
+   "asks": "What is the motion cycle?",
+   "data": "linkage geometry",
+   "must": [
+    "ghosted positions",
+    "instant centre"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S006"
+   ],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.2_dark.webp",
+   "light": "explain/img/plot/F4.2_light.webp",
+   "subjects": [
+    "stiff-sciml",
+    "geometry"
+   ],
+   "explainer": "plot.F4.2",
+   "live": []
+  },
+  {
+   "id": "F4.3",
+   "name": "Trajectory with velocity arrows",
+   "asks": "Where does it go and how fast?",
+   "data": "r(t), v(t)",
+   "must": [
+    "equal aspect",
+    "drag vs no-drag overlay"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S003",
+    "S005"
+   ],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.3_dark.webp",
+   "light": "explain/img/plot/F4.3_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F4.3",
+   "live": []
+  },
+  {
+   "id": "F4.4",
+   "name": "Stacked kinematics (x, v, a vs t)",
+   "asks": "How are position, velocity, acceleration linked?",
+   "data": "x(t)",
+   "must": [
+    "shared t axis"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S003"
+   ],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.4_dark.webp",
+   "light": "explain/img/plot/F4.4_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F4.4",
+   "live": []
+  },
+  {
+   "id": "F4.5",
+   "name": "Energy budget (stacked bars or areas)",
+   "asks": "Where does the energy go?",
+   "data": "energy shares vs t",
+   "must": [
+    "totals shown",
+    "conserved total drawn"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S009"
+   ],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.5_dark.webp",
+   "light": "explain/img/plot/F4.5_light.webp",
+   "subjects": [
+    "stiff-sciml",
+    "thermal-process"
+   ],
+   "explainer": "plot.F4.5",
+   "live": []
+  },
+  {
+   "id": "F4.6",
+   "name": "Friction circle and limit curves",
+   "asks": "When does it slip?",
+   "data": "forces, mu",
+   "must": [
+    "limit curve drawn"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S004"
+   ],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.6_dark.webp",
+   "light": "explain/img/plot/F4.6_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F4.6",
+   "live": []
+  },
+  {
+   "id": "F4.7",
+   "name": "Phase portrait with nullclines",
+   "asks": "What are the equilibria and their stability?",
+   "data": "2D ODE",
+   "must": [
+    "fixed points typed",
+    "nullclines"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course bifurcation S-curve"
+   ],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.7_dark.webp",
+   "light": "explain/img/plot/F4.7_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F4.7",
+   "live": [
+    {
+     "route": "solver?tab=ode&preset=1",
+     "label": "Pendulum: centres and saddles"
+    }
+   ]
+  },
+  {
+   "id": "F4.8",
+   "name": "Poincare section and limit cycle",
+   "asks": "Is the motion periodic or chaotic?",
+   "data": "long trajectory",
+   "must": [
+    "section plane stated"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.8_dark.webp",
+   "light": "explain/img/plot/F4.8_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F4.8",
+   "live": []
+  },
+  {
+   "id": "F4.9",
+   "name": "Moving-frame plot",
+   "asks": "How does it look from the rotating frame?",
+   "data": "r(t) in two frames",
+   "must": [
+    "both frames side by side"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S004"
+   ],
+   "family": "F4",
+   "family_name": "Dynamics and mechanics",
+   "dark": "explain/img/plot/F4.9_dark.webp",
+   "light": "explain/img/plot/F4.9_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F4.9",
+   "live": []
+  },
+  {
+   "id": "F5.1",
+   "name": "Convergence plot with fitted slopes",
+   "asks": "What is the observed order?",
+   "data": "error vs h",
+   "must": [
+    "log-log",
+    "slope fitted and printed",
+    "floor line"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course",
+    "math-course S010"
+   ],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.1_dark.webp",
+   "light": "explain/img/plot/F5.1_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.1",
+   "live": [
+    {
+     "route": "atlas?ch=S30&ex=1",
+     "label": "Forward difference: first order"
+    }
+   ]
+  },
+  {
+   "id": "F5.2",
+   "name": "Absolute-stability region",
+   "asks": "Which h*lambda are stable?",
+   "data": "R(z) on complex plane",
+   "must": [
+    "|R|=1 contour",
+    "eigenvalues of the problem overlaid"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.2_dark.webp",
+   "light": "explain/img/plot/F5.2_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.2",
+   "live": [
+    {
+     "route": "atlas?ch=S32&ex=0",
+     "label": "Explicit Euler on a stiff decay"
+    },
+    {
+     "route": "atlas?ch=S32&ex=1",
+     "label": "Implicit Euler is unconditionally stable"
+    }
+   ]
+  },
+  {
+   "id": "F5.3",
+   "name": "Eigenvalue scatter with unit circle",
+   "asks": "Are the discrete eigenvalues inside the stable disc?",
+   "data": "eigs of one-step map",
+   "must": [
+    "unit circle"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.3_dark.webp",
+   "light": "explain/img/plot/F5.3_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.3",
+   "live": []
+  },
+  {
+   "id": "F5.4",
+   "name": "Step-size trace vs stability ceiling",
+   "asks": "Is the adaptive solver limited by accuracy or stability?",
+   "data": "h(t)",
+   "must": [
+    "ceiling line",
+    "log axis"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.4_dark.webp",
+   "light": "explain/img/plot/F5.4_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.4",
+   "live": []
+  },
+  {
+   "id": "F5.5",
+   "name": "Conservation drift",
+   "asks": "Does it preserve the invariant?",
+   "data": "|I-I0| vs t or h",
+   "must": [
+    "log axis",
+    "machine-epsilon floor"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.5_dark.webp",
+   "light": "explain/img/plot/F5.5_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.5",
+   "live": []
+  },
+  {
+   "id": "F5.6",
+   "name": "Error surface over step and method",
+   "asks": "Which method wins where?",
+   "data": "log err(h, method)",
+   "must": [
+    "log colour scale"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.6_dark.webp",
+   "light": "explain/img/plot/F5.6_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.6",
+   "live": []
+  },
+  {
+   "id": "F5.7",
+   "name": "Condition number versus parameter",
+   "asks": "Where is the problem ill-conditioned?",
+   "data": "cond",
+   "must": [
+    "log axis"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.7_dark.webp",
+   "light": "explain/img/plot/F5.7_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.7",
+   "live": []
+  },
+  {
+   "id": "F5.8",
+   "name": "Aliasing and sampling overlay",
+   "asks": "What is lost by sampling?",
+   "data": "signal + samples",
+   "must": [
+    "Nyquist marker"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.8_dark.webp",
+   "light": "explain/img/plot/F5.8_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.8",
+   "live": []
+  },
+  {
+   "id": "F5.9",
+   "name": "Work-precision diagram",
+   "asks": "Which solver is cheapest for a target accuracy?",
+   "data": "cost vs error per solver",
+   "must": [
+    "log-log",
+    "tolerance labels"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F5",
+   "family_name": "Numerical analysis",
+   "dark": "explain/img/plot/F5.9_dark.webp",
+   "light": "explain/img/plot/F5.9_light.webp",
+   "subjects": [
+    "cfd-numerics"
+   ],
+   "explainer": "plot.F5.9",
+   "live": []
+  },
+  {
+   "id": "F6.1",
+   "name": "Eigenvalue-versus-time (symlog)",
+   "asks": "How stiff is it along the trajectory?",
+   "data": "Re(lambda)(t)",
+   "must": [
+    "symlog threshold stated"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.1_dark.webp",
+   "light": "explain/img/plot/F6.1_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.1",
+   "live": []
+  },
+  {
+   "id": "F6.2",
+   "name": "Eigenvalue compression before/after transform",
+   "asks": "Did the transform reduce stiffness?",
+   "data": "spectrum in two coordinates",
+   "must": [
+    "same axes",
+    "ratio printed"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.2_dark.webp",
+   "light": "explain/img/plot/F6.2_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.2",
+   "live": []
+  },
+  {
+   "id": "F6.3",
+   "name": "State-simplex trajectory (3D, coloured by log time)",
+   "asks": "Does the orbit stay physical?",
+   "data": "species fractions",
+   "must": [
+    "simplex edges",
+    "exact vs learned overlay"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.3_dark.webp",
+   "light": "explain/img/plot/F6.3_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.3",
+   "live": []
+  },
+  {
+   "id": "F6.4",
+   "name": "Key-frame strip of an animation",
+   "asks": "What happens over time, at a glance?",
+   "data": "animation frames",
+   "must": [
+    "time stamps"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.4_dark.webp",
+   "light": "explain/img/plot/F6.4_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.4",
+   "live": []
+  },
+  {
+   "id": "F6.5",
+   "name": "Training audit trace (seeds thin, mean bold)",
+   "asks": "Is the result real or seed noise?",
+   "data": "metric vs epoch, seeds",
+   "must": [
+    "all seeds drawn",
+    "noise floor"
+   ],
+   "status": "have",
+   "seen_in": [
+    "sciml audit"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.5_dark.webp",
+   "light": "explain/img/plot/F6.5_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.5",
+   "live": []
+  },
+  {
+   "id": "F6.6",
+   "name": "Dead-fraction and loss-landscape maps",
+   "asks": "Where does training fail?",
+   "data": "grid over hyper-parameters",
+   "must": [
+    "contour of loss"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.6_dark.webp",
+   "light": "explain/img/plot/F6.6_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.6",
+   "live": []
+  },
+  {
+   "id": "F6.7",
+   "name": "Commutative diagram with mismatch arrow",
+   "asks": "Do two routes give the same answer?",
+   "data": "maps",
+   "must": [
+    "mismatch value on arrow"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.7_dark.webp",
+   "light": "explain/img/plot/F6.7_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.7",
+   "live": []
+  },
+  {
+   "id": "F6.8",
+   "name": "Adjoint-gradient check (adjoint vs finite difference)",
+   "asks": "Is the gradient right?",
+   "data": "gradients per parameter",
+   "must": [
+    "log error",
+    "FD floor line"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course verification errors"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.8_dark.webp",
+   "light": "explain/img/plot/F6.8_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.8",
+   "live": []
+  },
+  {
+   "id": "F6.9",
+   "name": "Rollout error growth with horizon",
+   "asks": "How fast does error accumulate in autoregressive use?",
+   "data": "error vs step",
+   "must": [
+    "log axis",
+    "exponential reference"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course error exploding backwards"
+   ],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.9_dark.webp",
+   "light": "explain/img/plot/F6.9_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.9",
+   "live": []
+  },
+  {
+   "id": "F6.10",
+   "name": "Latent-space projection coloured by physics",
+   "asks": "Does the latent space organise by physics?",
+   "data": "embeddings",
+   "must": [
+    "colour = a physical quantity"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F6",
+   "family_name": "Stiffness, ODE theory and Neural ODEs",
+   "dark": "explain/img/plot/F6.10_dark.webp",
+   "light": "explain/img/plot/F6.10_light.webp",
+   "subjects": [
+    "stiff-sciml"
+   ],
+   "explainer": "plot.F6.10",
+   "live": []
+  },
+  {
+   "id": "F7.1",
+   "name": "Optimizer race (best-so-far vs evaluations)",
+   "asks": "Which converges faster at equal budget?",
+   "data": "best f vs n_eval per optimizer, repeats",
+   "must": [
+    "median + band over repeats",
+    "same budget",
+    "log y"
+   ],
+   "status": "have",
+   "seen_in": [
+    "dokimazo",
+    "mso-objectives"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.1_dark.webp",
+   "light": "explain/img/plot/F7.1_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.1",
+   "live": []
+  },
+  {
+   "id": "F7.2",
+   "name": "Landscape surface with trajectory",
+   "asks": "Where did the search go?",
+   "data": "f on grid + path",
+   "must": [
+    "path on surface",
+    "start and end marked"
+   ],
+   "status": "have",
+   "seen_in": [
+    "dokimazo Rastrigin",
+    "Himmelblau"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.2_dark.webp",
+   "light": "explain/img/plot/F7.2_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.2",
+   "live": []
+  },
+  {
+   "id": "F7.3",
+   "name": "Hyper-parameter heatmap per solver",
+   "asks": "How sensitive is each solver to its settings?",
+   "data": "metric(p1, p2) per solver",
+   "must": [
+    "shared colour scale across solvers",
+    "cell values"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mso-objectives"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.3_dark.webp",
+   "light": "explain/img/plot/F7.3_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.3",
+   "live": []
+  },
+  {
+   "id": "F7.4",
+   "name": "Pareto front",
+   "asks": "What are the trade-offs?",
+   "data": "objectives, dominance",
+   "must": [
+    "dominated vs non-dominated",
+    "knee marked"
+   ],
+   "status": "have",
+   "seen_in": [
+    "vZero ParetoView"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.4_dark.webp",
+   "light": "explain/img/plot/F7.4_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.4",
+   "live": []
+  },
+  {
+   "id": "F7.5",
+   "name": "Objective comparison on one problem (e.g. classical vs power-mean)",
+   "asks": "Does the objective change the answer?",
+   "data": "fit curves per objective",
+   "must": [
+    "same data",
+    "equal budget"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mso-objectives"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.5_dark.webp",
+   "light": "explain/img/plot/F7.5_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.5",
+   "live": []
+  },
+  {
+   "id": "F7.6",
+   "name": "Ablation dot plot",
+   "asks": "Which component matters?",
+   "data": "metric per variant",
+   "must": [
+    "intervals",
+    "baseline line"
+   ],
+   "status": "have",
+   "seen_in": [
+    "vZero ablation"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.6_dark.webp",
+   "light": "explain/img/plot/F7.6_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.6",
+   "live": []
+  },
+  {
+   "id": "F7.7",
+   "name": "Response-surface fit and residuals",
+   "asks": "How good is the surrogate?",
+   "data": "surrogate vs truth",
+   "must": [
+    "parity line",
+    "residual panel"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mso-objectives surrogate comparison"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.7_dark.webp",
+   "light": "explain/img/plot/F7.7_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.7",
+   "live": []
+  },
+  {
+   "id": "F7.8",
+   "name": "Parameter-space coverage (design of experiments)",
+   "asks": "Did sampling cover the space?",
+   "data": "sample points",
+   "must": [
+    "projection matrix"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac design space"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.8_dark.webp",
+   "light": "explain/img/plot/F7.8_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.8",
+   "live": []
+  },
+  {
+   "id": "F7.9",
+   "name": "Optimization progress live panel (error vs iteration + parameters)",
+   "asks": "Is the run healthy?",
+   "data": "run log",
+   "must": [
+    "stop criteria drawn"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac wt-8/9"
+   ],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.9_dark.webp",
+   "light": "explain/img/plot/F7.9_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.9",
+   "live": []
+  },
+  {
+   "id": "F7.10",
+   "name": "Regret and rank plot across test problems",
+   "asks": "Which optimizer is best on average?",
+   "data": "rank per problem",
+   "must": [
+    "critical-difference marks"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F7",
+   "family_name": "Optimization",
+   "dark": "explain/img/plot/F7.10_dark.webp",
+   "light": "explain/img/plot/F7.10_light.webp",
+   "subjects": [
+    "optimization"
+   ],
+   "explainer": "plot.F7.10",
+   "live": []
+  },
+  {
+   "id": "F8.1",
+   "name": "Histogram and ECDF",
+   "asks": "What is the distribution?",
+   "data": "samples",
+   "must": [
+    "bin rule stated",
+    "ECDF for small n"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course ECDF"
+   ],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.1_dark.webp",
+   "light": "explain/img/plot/F8.1_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.1",
+   "live": []
+  },
+  {
+   "id": "F8.2",
+   "name": "Correlation matrix with significance",
+   "asks": "Which parameters co-vary?",
+   "data": "samples",
+   "must": [
+    "diverging cmap centred at 0",
+    "values printed"
+   ],
+   "status": "have",
+   "seen_in": [
+    "muq-sac correlation"
+   ],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.2_dark.webp",
+   "light": "explain/img/plot/F8.2_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.2",
+   "live": []
+  },
+  {
+   "id": "F8.3",
+   "name": "Prediction band with data (UQ propagation)",
+   "asks": "How wide is the prediction uncertainty?",
+   "data": "ensemble curves",
+   "must": [
+    "band definition (68/95 percent) stated"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac",
+    "muq-sac"
+   ],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.3_dark.webp",
+   "light": "explain/img/plot/F8.3_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.3",
+   "live": []
+  },
+  {
+   "id": "F8.4",
+   "name": "Sampling-method comparison (LHS, Sobol, random)",
+   "asks": "Which sampling covers better?",
+   "data": "points",
+   "must": [
+    "same n"
+   ],
+   "status": "have",
+   "seen_in": [
+    "muq-sac"
+   ],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.4_dark.webp",
+   "light": "explain/img/plot/F8.4_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.4",
+   "live": []
+  },
+  {
+   "id": "F8.5",
+   "name": "Sensitivity bars (tornado) and Sobol indices",
+   "asks": "Which inputs drive the output?",
+   "data": "indices",
+   "must": [
+    "sorted",
+    "confidence intervals"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac"
+   ],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.5_dark.webp",
+   "light": "explain/img/plot/F8.5_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.5",
+   "live": []
+  },
+  {
+   "id": "F8.6",
+   "name": "Noise-floor plot",
+   "asks": "Is the difference bigger than noise?",
+   "data": "metric over seeds",
+   "must": [
+    "floor line"
+   ],
+   "status": "have",
+   "seen_in": [
+    "sciml fig1_noise_floor"
+   ],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.6_dark.webp",
+   "light": "explain/img/plot/F8.6_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.6",
+   "live": []
+  },
+  {
+   "id": "F8.7",
+   "name": "QQ plot and residual diagnostics",
+   "asks": "Are errors Gaussian and unbiased?",
+   "data": "residuals",
+   "must": [
+    "reference line"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.7_dark.webp",
+   "light": "explain/img/plot/F8.7_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.7",
+   "live": []
+  },
+  {
+   "id": "F8.8",
+   "name": "Posterior corner plot",
+   "asks": "What do the parameter posteriors look like?",
+   "data": "MCMC or ensemble samples",
+   "must": [
+    "marginals + pairwise"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.8_dark.webp",
+   "light": "explain/img/plot/F8.8_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.8",
+   "live": []
+  },
+  {
+   "id": "F8.9",
+   "name": "Kappa-scale sampling class animation",
+   "asks": "How do uncertainty classes behave under scaling?",
+   "data": "samples vs scale",
+   "must": [
+    "UQ limits shown"
+   ],
+   "status": "have",
+   "seen_in": [
+    "muq-sac"
+   ],
+   "family": "F8",
+   "family_name": "Uncertainty and statistics",
+   "dark": "explain/img/plot/F8.9_dark.webp",
+   "light": "explain/img/plot/F8.9_light.webp",
+   "subjects": [
+    "uq"
+   ],
+   "explainer": "plot.F8.9",
+   "live": []
+  },
+  {
+   "id": "F9.1",
+   "name": "Ignition delay vs 1000/T (Arrhenius plot)",
+   "asks": "Does it match autoignition data?",
+   "data": "tau(T) per phi and p",
+   "must": [
+    "log y",
+    "1000/T x",
+    "experiment markers vs model lines"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac",
+    "mso-objectives"
+   ],
+   "family": "F9",
+   "family_name": "Combustion kinetics",
+   "dark": "explain/img/plot/F9.1_dark.webp",
+   "light": "explain/img/plot/F9.1_light.webp",
+   "subjects": [
+    "kinetics"
+   ],
+   "explainer": "plot.F9.1",
+   "live": [
+    {
+     "route": "molecules?preset=11",
+     "label": "The Arrhenius plot: ln k against 1/T"
+    }
+   ]
+  },
+  {
+   "id": "F9.2",
+   "name": "Laminar flame speed vs phi",
+   "asks": "Does it match flame data?",
+   "data": "S_L(phi)",
+   "must": [
+    "dilution labelled"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac"
+   ],
+   "family": "F9",
+   "family_name": "Combustion kinetics",
+   "dark": "explain/img/plot/F9.2_dark.webp",
+   "light": "explain/img/plot/F9.2_light.webp",
+   "subjects": [
+    "kinetics"
+   ],
+   "explainer": "plot.F9.2",
+   "live": []
+  },
+  {
+   "id": "F9.3",
+   "name": "Extinction strain rate",
+   "asks": "Where does the flame extinguish?",
+   "data": "a_ext(phi)",
+   "must": [
+    "data markers"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac"
+   ],
+   "family": "F9",
+   "family_name": "Combustion kinetics",
+   "dark": "explain/img/plot/F9.3_dark.webp",
+   "light": "explain/img/plot/F9.3_light.webp",
+   "subjects": [
+    "kinetics"
+   ],
+   "explainer": "plot.F9.3",
+   "live": []
+  },
+  {
+   "id": "F9.4",
+   "name": "Species profiles",
+   "asks": "Are intermediates right?",
+   "data": "X_i(t or x)",
+   "must": [
+    "log y option",
+    "same T",
+    "p stated"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac"
+   ],
+   "family": "F9",
+   "family_name": "Combustion kinetics",
+   "dark": "explain/img/plot/F9.4_dark.webp",
+   "light": "explain/img/plot/F9.4_light.webp",
+   "subjects": [
+    "kinetics"
+   ],
+   "explainer": "plot.F9.4",
+   "live": []
+  },
+  {
+   "id": "F9.5",
+   "name": "Ignitability and stiffness map in (T,p,phi)",
+   "asks": "Where is the chemistry stiff or non-igniting?",
+   "data": "3D scatter or slices",
+   "must": [
+    "training region outlined"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac"
+   ],
+   "family": "F9",
+   "family_name": "Combustion kinetics",
+   "dark": "explain/img/plot/F9.5_dark.webp",
+   "light": "explain/img/plot/F9.5_light.webp",
+   "subjects": [
+    "kinetics"
+   ],
+   "explainer": "plot.F9.5",
+   "live": []
+  },
+  {
+   "id": "F9.6",
+   "name": "Reaction sensitivity and flux (bars, Sankey)",
+   "asks": "Which reactions matter?",
+   "data": "coefficients",
+   "must": [
+    "normalised",
+    "sorted"
+   ],
+   "status": "have",
+   "seen_in": [
+    "mosiac"
+   ],
+   "family": "F9",
+   "family_name": "Combustion kinetics",
+   "dark": "explain/img/plot/F9.6_dark.webp",
+   "light": "explain/img/plot/F9.6_light.webp",
+   "subjects": [
+    "kinetics"
+   ],
+   "explainer": "plot.F9.6",
+   "live": []
+  },
+  {
+   "id": "F9.7",
+   "name": "Arrhenius parameter scatter within uncertainty bounds",
+   "asks": "Are optimized A, n, Ea inside prior ranges?",
+   "data": "parameters + bounds",
+   "must": [
+    "bounds drawn"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F9",
+   "family_name": "Combustion kinetics",
+   "dark": "explain/img/plot/F9.7_dark.webp",
+   "light": "explain/img/plot/F9.7_light.webp",
+   "subjects": [
+    "kinetics"
+   ],
+   "explainer": "plot.F9.7",
+   "live": []
+  },
+  {
+   "id": "F9.8",
+   "name": "Reaction network graph",
+   "asks": "How is the chemistry connected?",
+   "data": "stoichiometry",
+   "must": [
+    "node size = flux"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F9",
+   "family_name": "Combustion kinetics",
+   "dark": "explain/img/plot/F9.8_dark.webp",
+   "light": "explain/img/plot/F9.8_light.webp",
+   "subjects": [
+    "kinetics"
+   ],
+   "explainer": "plot.F9.8",
+   "live": []
+  },
+  {
+   "id": "F10.1",
+   "name": "Contour and slice field",
+   "asks": "What does the field look like?",
+   "data": "scalar on mesh",
+   "must": [
+    "colour bar with units",
+    "perceptual cmap"
+   ],
+   "status": "have",
+   "seen_in": [
+    "cfdcore",
+    "turbulence-closures"
+   ],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.1_dark.webp",
+   "light": "explain/img/plot/F10.1_light.webp",
+   "subjects": [
+    "cfd-numerics",
+    "turbulence",
+    "microfluidics"
+   ],
+   "explainer": "plot.F10.1",
+   "live": []
+  },
+  {
+   "id": "F10.2",
+   "name": "Profile lines vs reference data",
+   "asks": "Does it match experiment or DNS?",
+   "data": "profiles",
+   "must": [
+    "reference as markers"
+   ],
+   "status": "have",
+   "seen_in": [
+    "turbulence-closures validation"
+   ],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.2_dark.webp",
+   "light": "explain/img/plot/F10.2_light.webp",
+   "subjects": [
+    "turbulence",
+    "microfluidics"
+   ],
+   "explainer": "plot.F10.2",
+   "live": []
+  },
+  {
+   "id": "F10.3",
+   "name": "Energy spectrum with slope reference",
+   "asks": "Is there an inertial range?",
+   "data": "E(k)",
+   "must": [
+    "-5/3 line",
+    "log-log"
+   ],
+   "status": "have",
+   "seen_in": [
+    "turbulence-closures spectral"
+   ],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.3_dark.webp",
+   "light": "explain/img/plot/F10.3_light.webp",
+   "subjects": [
+    "turbulence"
+   ],
+   "explainer": "plot.F10.3",
+   "live": []
+  },
+  {
+   "id": "F10.4",
+   "name": "Anisotropy invariant map (Lumley triangle)",
+   "asks": "What is the state of the Reynolds stress?",
+   "data": "xi, eta",
+   "must": [
+    "triangle bounds"
+   ],
+   "status": "have",
+   "seen_in": [
+    "turbulence-closures anisotropy"
+   ],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.4_dark.webp",
+   "light": "explain/img/plot/F10.4_light.webp",
+   "subjects": [
+    "turbulence"
+   ],
+   "explainer": "plot.F10.4",
+   "live": []
+  },
+  {
+   "id": "F10.5",
+   "name": "Vortex identification (Q, lambda2 iso-surfaces)",
+   "asks": "Where are the coherent structures?",
+   "data": "3D field",
+   "must": [
+    "threshold stated"
+   ],
+   "status": "have",
+   "seen_in": [
+    "turbulence-closures"
+   ],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.5_dark.webp",
+   "light": "explain/img/plot/F10.5_light.webp",
+   "subjects": [
+    "turbulence"
+   ],
+   "explainer": "plot.F10.5",
+   "live": []
+  },
+  {
+   "id": "F10.6",
+   "name": "Budget bars (production, dissipation, transport)",
+   "asks": "What balances what?",
+   "data": "budget terms",
+   "must": [
+    "residual shown"
+   ],
+   "status": "have",
+   "seen_in": [
+    "turbulence-closures"
+   ],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.6_dark.webp",
+   "light": "explain/img/plot/F10.6_light.webp",
+   "subjects": [
+    "turbulence"
+   ],
+   "explainer": "plot.F10.6",
+   "live": []
+  },
+  {
+   "id": "F10.7",
+   "name": "Mesh and geometry views",
+   "asks": "Is the grid adequate?",
+   "data": "mesh",
+   "must": [
+    "zoom insets at walls"
+   ],
+   "status": "have",
+   "seen_in": [
+    "cfdcore",
+    "decarbonisation-tuyeres"
+   ],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.7_dark.webp",
+   "light": "explain/img/plot/F10.7_light.webp",
+   "subjects": [
+    "cfd-numerics",
+    "turbulence"
+   ],
+   "explainer": "plot.F10.7",
+   "live": []
+  },
+  {
+   "id": "F10.8",
+   "name": "Verification (grid convergence, manufactured solutions)",
+   "asks": "Is the solver right?",
+   "data": "error vs h",
+   "must": [
+    "observed order",
+    "GCI band"
+   ],
+   "status": "have",
+   "seen_in": [
+    "cfdcore numerics-verification"
+   ],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.8_dark.webp",
+   "light": "explain/img/plot/F10.8_light.webp",
+   "subjects": [
+    "cfd-numerics",
+    "turbulence"
+   ],
+   "explainer": "plot.F10.8",
+   "live": []
+  },
+  {
+   "id": "F10.9",
+   "name": "Residual history and monitor points",
+   "asks": "Has the run converged?",
+   "data": "residual vs iter",
+   "must": [
+    "log y",
+    "tolerance line"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.9_dark.webp",
+   "light": "explain/img/plot/F10.9_light.webp",
+   "subjects": [
+    "cfd-numerics",
+    "turbulence"
+   ],
+   "explainer": "plot.F10.9",
+   "live": []
+  },
+  {
+   "id": "F10.10",
+   "name": "Wall-resolution map (y+)",
+   "asks": "Is the near-wall mesh right for the model?",
+   "data": "y+ on wall",
+   "must": [
+    "target band"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F10",
+   "family_name": "CFD, turbulence and fields",
+   "dark": "explain/img/plot/F10.10_dark.webp",
+   "light": "explain/img/plot/F10.10_light.webp",
+   "subjects": [
+    "cfd-numerics",
+    "turbulence"
+   ],
+   "explainer": "plot.F10.10",
+   "live": []
+  },
+  {
+   "id": "F11.1",
+   "name": "Detection overlay on a real frame",
+   "asks": "Is the detection right?",
+   "data": "frame + contour",
+   "must": [
+    "original frame visible",
+    "legend of overlay colours"
+   ],
+   "status": "have",
+   "seen_in": [
+    "flamelab"
+   ],
+   "family": "F11",
+   "family_name": "Experiment and computer vision",
+   "dark": "explain/img/plot/F11.1_dark.webp",
+   "light": "explain/img/plot/F11.1_light.webp",
+   "subjects": [
+    "experimental"
+   ],
+   "explainer": "plot.F11.1",
+   "live": []
+  },
+  {
+   "id": "F11.2",
+   "name": "Calibration overlay and ruler",
+   "asks": "Is the pixel scale right?",
+   "data": "frame + reference",
+   "must": [
+    "scale bar"
+   ],
+   "status": "have",
+   "seen_in": [
+    "flamelab calibrator"
+   ],
+   "family": "F11",
+   "family_name": "Experiment and computer vision",
+   "dark": "explain/img/plot/F11.2_dark.webp",
+   "light": "explain/img/plot/F11.2_light.webp",
+   "subjects": [
+    "experimental"
+   ],
+   "explainer": "plot.F11.2",
+   "live": []
+  },
+  {
+   "id": "F11.3",
+   "name": "Time series of tip, width, fluctuation",
+   "asks": "How does the flame fluctuate?",
+   "data": "metric(t)",
+   "must": [
+    "units",
+    "sampling rate"
+   ],
+   "status": "have",
+   "seen_in": [
+    "flamelab"
+   ],
+   "family": "F11",
+   "family_name": "Experiment and computer vision",
+   "dark": "explain/img/plot/F11.3_dark.webp",
+   "light": "explain/img/plot/F11.3_light.webp",
+   "subjects": [
+    "experimental"
+   ],
+   "explainer": "plot.F11.3",
+   "live": []
+  },
+  {
+   "id": "F11.4",
+   "name": "Zonal and ensemble statistics",
+   "asks": "How does it vary across zones and runs?",
+   "data": "stats per zone",
+   "must": [
+    "n per zone"
+   ],
+   "status": "have",
+   "seen_in": [
+    "flamelab"
+   ],
+   "family": "F11",
+   "family_name": "Experiment and computer vision",
+   "dark": "explain/img/plot/F11.4_dark.webp",
+   "light": "explain/img/plot/F11.4_light.webp",
+   "subjects": [
+    "experimental"
+   ],
+   "explainer": "plot.F11.4",
+   "live": []
+  },
+  {
+   "id": "F11.5",
+   "name": "Process schematic and P&ID",
+   "asks": "How is the rig built?",
+   "data": "drawing",
+   "must": [
+    "palette from tokens"
+   ],
+   "status": "have",
+   "seen_in": [
+    "vaporizer-rigs"
+   ],
+   "family": "F11",
+   "family_name": "Experiment and computer vision",
+   "dark": "explain/img/plot/F11.5_dark.webp",
+   "light": "explain/img/plot/F11.5_light.webp",
+   "subjects": [
+    "experimental",
+    "thermal-process"
+   ],
+   "explainer": "plot.F11.5",
+   "live": []
+  },
+  {
+   "id": "F11.6",
+   "name": "Spectrogram or wavelet of a measured signal",
+   "asks": "What frequencies are present over time?",
+   "data": "signal",
+   "must": [
+    "axes in physical units"
+   ],
+   "status": "have",
+   "seen_in": [
+    "node-course scalogram"
+   ],
+   "family": "F11",
+   "family_name": "Experiment and computer vision",
+   "dark": "explain/img/plot/F11.6_dark.webp",
+   "light": "explain/img/plot/F11.6_light.webp",
+   "subjects": [
+    "experimental"
+   ],
+   "explainer": "plot.F11.6",
+   "live": []
+  },
+  {
+   "id": "F11.7",
+   "name": "Measurement-vs-model parity plot",
+   "asks": "How well does the model reproduce the measurement?",
+   "data": "pairs",
+   "must": [
+    "1:1 line",
+    "error metric"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F11",
+   "family_name": "Experiment and computer vision",
+   "dark": "explain/img/plot/F11.7_dark.webp",
+   "light": "explain/img/plot/F11.7_light.webp",
+   "subjects": [
+    "experimental"
+   ],
+   "explainer": "plot.F11.7",
+   "live": []
+  },
+  {
+   "id": "F12.1",
+   "name": "Architecture and flow diagram",
+   "asks": "How is the software or method structured?",
+   "data": "nodes",
+   "must": [
+    "layers labelled"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F12",
+   "family_name": "Structure and concept",
+   "dark": "explain/img/plot/F12.1_dark.webp",
+   "light": "explain/img/plot/F12.1_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F12.1",
+   "live": []
+  },
+  {
+   "id": "F12.2",
+   "name": "Curriculum and dependency map",
+   "asks": "What depends on what?",
+   "data": "DAG",
+   "must": [
+    "direction"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F12",
+   "family_name": "Structure and concept",
+   "dark": "explain/img/plot/F12.2_dark.webp",
+   "light": "explain/img/plot/F12.2_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F12.2",
+   "live": []
+  },
+  {
+   "id": "F12.3",
+   "name": "Table with row/column sums",
+   "asks": "Do the numbers add up?",
+   "data": "matrix",
+   "must": [
+    "totals"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course"
+   ],
+   "family": "F12",
+   "family_name": "Structure and concept",
+   "dark": "explain/img/plot/F12.3_dark.webp",
+   "light": "explain/img/plot/F12.3_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F12.3",
+   "live": []
+  },
+  {
+   "id": "F12.4",
+   "name": "Stacked ledger (bars)",
+   "asks": "Where does the total come from?",
+   "data": "parts",
+   "must": [
+    "total line"
+   ],
+   "status": "have",
+   "seen_in": [
+    "math-course S009"
+   ],
+   "family": "F12",
+   "family_name": "Structure and concept",
+   "dark": "explain/img/plot/F12.4_dark.webp",
+   "light": "explain/img/plot/F12.4_light.webp",
+   "subjects": [
+    "thermal-process",
+    "playground"
+   ],
+   "explainer": "plot.F12.4",
+   "live": []
+  },
+  {
+   "id": "F12.5",
+   "name": "Timeline of project or research journey",
+   "asks": "How did the work evolve?",
+   "data": "events",
+   "must": [
+    "dates"
+   ],
+   "status": "have",
+   "seen_in": [
+    "sciml journey"
+   ],
+   "family": "F12",
+   "family_name": "Structure and concept",
+   "dark": "explain/img/plot/F12.5_dark.webp",
+   "light": "explain/img/plot/F12.5_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F12.5",
+   "live": []
+  },
+  {
+   "id": "F13.1",
+   "name": "Slider-parameter sweep with live readout",
+   "asks": "What if I change this?",
+   "data": "model",
+   "must": [
+    "reset",
+    "units"
+   ],
+   "status": "have",
+   "seen_in": [
+    "Math Studio"
+   ],
+   "family": "F13",
+   "family_name": "Interactive and animated forms",
+   "dark": "explain/img/plot/F13.1_dark.webp",
+   "light": "explain/img/plot/F13.1_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F13.1",
+   "live": []
+  },
+  {
+   "id": "F13.2",
+   "name": "Linked 2D and 3D views",
+   "asks": "How do the views correspond?",
+   "data": "model",
+   "must": [
+    "shared selection"
+   ],
+   "status": "have",
+   "seen_in": [
+    "Math Studio"
+   ],
+   "family": "F13",
+   "family_name": "Interactive and animated forms",
+   "dark": "explain/img/plot/F13.2_dark.webp",
+   "light": "explain/img/plot/F13.2_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F13.2",
+   "live": []
+  },
+  {
+   "id": "F13.3",
+   "name": "Timeline-scrubbed animation (play, loop, speed)",
+   "asks": "What happens over time?",
+   "data": "frames",
+   "must": [
+    "shared timeline",
+    "time label"
+   ],
+   "status": "have",
+   "seen_in": [
+    "Math Studio",
+    "node-course"
+   ],
+   "family": "F13",
+   "family_name": "Interactive and animated forms",
+   "dark": "explain/img/plot/F13.3_dark.webp",
+   "light": "explain/img/plot/F13.3_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F13.3",
+   "live": []
+  },
+  {
+   "id": "F13.4",
+   "name": "Comparison race (several runs animated together)",
+   "asks": "Which is faster, live?",
+   "data": "runs",
+   "must": [
+    "same clock"
+   ],
+   "status": "have",
+   "seen_in": [
+    "dokimazo"
+   ],
+   "family": "F13",
+   "family_name": "Interactive and animated forms",
+   "dark": "explain/img/plot/F13.4_dark.webp",
+   "light": "explain/img/plot/F13.4_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F13.4",
+   "live": []
+  },
+  {
+   "id": "F13.5",
+   "name": "Decision surface and arena",
+   "asks": "What would the model do here?",
+   "data": "model",
+   "must": [
+    "data overlaid"
+   ],
+   "status": "have",
+   "seen_in": [
+    "vZero"
+   ],
+   "family": "F13",
+   "family_name": "Interactive and animated forms",
+   "dark": "explain/img/plot/F13.5_dark.webp",
+   "light": "explain/img/plot/F13.5_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F13.5",
+   "live": []
+  },
+  {
+   "id": "F13.6",
+   "name": "Embedded notebook with live figures",
+   "asks": "Can I read the derivation and run it?",
+   "data": "text + code",
+   "must": [
+    "reproducible"
+   ],
+   "status": "gap",
+   "seen_in": [],
+   "family": "F13",
+   "family_name": "Interactive and animated forms",
+   "dark": "explain/img/plot/F13.6_dark.webp",
+   "light": "explain/img/plot/F13.6_light.webp",
+   "subjects": [
+    "playground"
+   ],
+   "explainer": "plot.F13.6",
+   "live": []
+  }
+ ]
+}

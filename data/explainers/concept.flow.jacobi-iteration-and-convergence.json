@@ -1,0 +1,328 @@
+{
+ "id": "concept.flow.jacobi-iteration-and-convergence",
+ "type": "concept",
+ "status": "full",
+ "title": "Jacobi iteration smooths the pressure but converges at a rate cos(pi/(N+1)): 6 to 24 sweeps are nowhere near a solve",
+ "summary": "Jacobi replaces every pressure by the average of its neighbours corrected by the divergence. The error shrinks by the spectral radius of the iteration matrix each sweep, and for an N by N grid that is cos(pi/(N+1)): just below one, so thousands of sweeps are needed to solve and the 6 to 24 sweeps of the hero only smooth. Conjugate gradients, Gauss-Seidel with over-relaxation and multigrid change the rate; the residual plot of the Flow workspace shows the difference.",
+ "subjects": [
+  "cfd-numerics"
+ ],
+ "media": {
+  "kind": "image",
+  "src": "media/flow/flow-residual_dark.webp",
+  "src_light": "media/flow/flow-residual_light.webp",
+  "alt": "Log plot of the relative residual of the pressure solve against iteration, 0 to 200: a dashed blue Jacobi curve falling slowly, a dashed rose conjugate-gradient curve falling later and faster, a solid teal curve for the current step and a dotted amber line.",
+  "caption": "Screenshot of the Dashboard of the Flow workspace: the relative residual of the pressure solve against iteration, for the current step (solid) and for a cold start with Jacobi and with conjugate gradients (dashed)."
+ },
+ "source": {
+  "note": "Standard theory (Chorin's projection method, Stam's stable fluids, Fedkiw, Stam and Jensen's vorticity confinement, Jacobi and conjugate-gradient iteration). No project result is quoted. Every number on this page was computed with numpy / sympy or measured on the Flow workspace's own solver by tools/flow_numbers.py and tools/flow_numbers.mjs, and the picture is a screenshot of that workspace."
+ },
+ "plot_classes": [],
+ "read_the_figure": {
+  "question": "How fast does each iterative solver reduce the residual ||b - A p|| / ||b||, and how many iterations are enough?",
+  "axes": "x: iteration number k, from 0 to 200. y: the relative residual on a logarithmic scale from 1e-8 to 2: each grid line is two decades. The dotted line is rho^k with the closed-form Jacobi rate. The orange vertical line is the number of iterations the simulation uses per step.",
+  "look_at": [
+   "The slope of the Jacobi curve: a straight line on a log plot means a constant factor per sweep, the spectral radius.",
+   "Where the conjugate-gradient curve crosses the Jacobi curve: CG starts slower and then overtakes it.",
+   "How much lower the solid curve starts than the dashed ones: the warm start p <- 0.8 p begins from last step's pressure.",
+   "The orange line against the curves: the residual left at the number of iterations actually used."
+  ],
+  "proves": "How much of the pressure equation each solver has solved at a given cost. It does not prove that the flow is right: a small residual can still hide an error as large as the condition number times it.",
+  "if_wrong": [
+   "A plot on a linear axis hides everything below 1e-2: the whole story is in the decades.",
+   "Comparing iteration counts of Jacobi and CG as if they cost the same: one CG step costs about twice a Jacobi sweep.",
+   "Starting one curve from a warm start and another from zero without saying so."
+  ],
+  "must_check": [
+   "Warm or cold start for each curve.",
+   "The norm of the residual (the 2-norm over the fluid cells here) and the normalisation by ||b||.",
+   "The boundary rule: it changes the rate (open box cos(pi/(N+1)); the plume's walls plus open top much closer to 1)."
+  ]
+ },
+ "terms": [
+  {
+   "term": "Jacobi iteration",
+   "meaning": "Update every unknown from its neighbours' values of the previous sweep, all at once. Needs no ordering and parallelises perfectly, which is why shaders use it.",
+   "symbol": "p^{(k+1)}_c=\\frac{1}{d_c}\\Big(\\sum_{c'\\sim c}p^{(k)}_{c'}-b_c\\Big)"
+  },
+  {
+   "term": "Residual",
+   "meaning": "How far the current guess is from solving the equations. The error is the distance from the exact solution, which the residual only bounds.",
+   "symbol": "r=b-Ap"
+  },
+  {
+   "term": "Iteration matrix",
+   "meaning": "The matrix that turns the error of one sweep into the error of the next.",
+   "symbol": "R=I-D^{-1}(-A)"
+  },
+  {
+   "term": "Spectral radius",
+   "meaning": "The largest size of an eigenvalue of the iteration matrix. The error shrinks by this factor per sweep in the long run.",
+   "symbol": "\\rho(R)"
+  },
+  {
+   "term": "Smoother",
+   "meaning": "An iteration that damps the rough (high-frequency) part of the error quickly and the smooth part slowly.",
+   "symbol": ""
+  },
+  {
+   "term": "Gauss-Seidel and SOR",
+   "meaning": "Use the new values as soon as they exist (Gauss-Seidel); extrapolate each update by a factor omega (successive over-relaxation).",
+   "symbol": "\\omega_{\\text{opt}}=\\frac{2}{1+\\sin\\frac{\\pi}{N+1}}"
+  },
+  {
+   "term": "Conjugate gradients",
+   "meaning": "A Krylov method for symmetric positive definite systems: each step minimises the error in the energy norm over all the search directions so far.",
+   "symbol": "\\|e_k\\|_A\\le2\\Big(\\frac{\\sqrt\\kappa-1}{\\sqrt\\kappa+1}\\Big)^k\\|e_0\\|_A"
+  },
+  {
+   "term": "Warm start",
+   "meaning": "Begin the iteration from the previous step's pressure (scaled by 0.8 in the hero) instead of zero, because pressure changes slowly in time.",
+   "symbol": "p^{(0)}=0.8\\,p^{n-1}"
+  }
+ ],
+ "remember": [
+  "Jacobi on the open $N\\times N$ grid: $\\rho(R)=\\cos\\frac{\\pi}{N+1}$. Error after $k$ sweeps $\\sim\\rho^k$; sweeps to gain a factor $\\varepsilon$: $\\ln\\varepsilon/\\ln\\rho$.",
+  "N = 6: $\\rho=0.90097$, 66 sweeps for $10^{-3}$. N = 64: $\\rho=0.99883$, 5912 sweeps. N = 96: $\\rho=0.99948$, 13168 sweeps.",
+  "For small $1-\\rho$: $1-\\rho\\approx\\pi^2/(2(N+1)^2)$, so the sweeps needed grow like $N^2$ and the work like $N^4$.",
+  "Gauss-Seidel: $\\rho_{GS}=\\rho_J^2$ for this matrix, half the sweeps. SOR with the optimal $\\omega$: $\\rho=\\omega-1$. CG: about $\\tfrac12\\sqrt\\kappa\\,\\ln(2/\\varepsilon)$ steps.",
+  "Plain Jacobi does not damp the highest-frequency modes better than the smooth ones (its rate there is also $\\rho$); weighted Jacobi with $\\omega=0.8$ does: smoothing factor 0.60.",
+  "A small residual does not mean a small error: $\\|e\\|/\\|x\\|\\le\\kappa\\,\\|r\\|/\\|b\\|$."
+ ],
+ "understand": [
+  {
+   "title": "Easy: pass the news along one neighbour at a time",
+   "text": "Jacobi is a rumour mill. Each cell tells its neighbours its pressure, and each cell sets its own pressure to the average of what it hears, corrected for any fluid being created there. News from the far side of a grid 64 cells wide needs about 64 sweeps just to arrive, and many more times that to settle, so a few dozen sweeps pass the news only locally. That is enough to smooth the pressure, not enough to solve it."
+  },
+  {
+   "title": "Medium: the rate is a cosine",
+   "text": "Each sweep multiplies the slowest-decaying part of the error by $\\rho=\\cos(\\pi/(N+1))$. For a 6 by 6 grid that is 0.9010, and 66 sweeps give a factor $10^{-3}$. For 64 by 64 it is 0.99883, and reaching $10^{-3}$ takes 5912 sweeps. The hero's 6 to 24 sweeps reduce the slowest error by only $\\rho^{20}=0.977$, a loss of about 2.3 % at k = 20."
+  },
+  {
+   "title": "Hard: how the solvers compare, with real numbers",
+   "text": "On the 64 by 64 open grid: Jacobi 5912 sweeps for $10^{-3}$; Gauss-Seidel 2956; SOR with $\\omega=1.9078$ about 71; CG about 157 steps. On the plume's own matrix (walls with an open top, rate 0.999852 in closed form and 0.999849 measured on a cold start) Jacobi had only reached 0.116 after 200 sweeps and CG 0.00415. Early on the order is reversed: after 24 iterations from zero Jacobi was at 0.252 and CG at 0.772, because CG minimises the energy norm of the error and its residual norm is not monotone."
+  },
+  {
+   "title": "Hardest: why Jacobi is not even a good smoother, and what a small residual hides",
+   "text": "The modes of the 5-point Jacobi matrix with the highest frequency in both directions have eigenvalue $-\\rho$, so plain Jacobi does not damp the checkerboard better than the smoothest mode: its smoothing factor over the upper half of the frequencies is 0.99883. Weighting the update by $\\omega=0.8$ lowers it to 0.599, the reason multigrid uses weighted Jacobi or Gauss-Seidel as its smoother. And a residual of $10^{-3}$ does not guarantee a relative error of $10^{-3}$: the bound is $\\kappa\\times10^{-3}=1.71$ for N = 64. Judging a pressure solve by its residual alone can be misleading when the matrix is ill conditioned."
+  }
+ ],
+ "steps": [
+  {
+   "title": "Split the matrix",
+   "tex": "A=D+(A-D),\\qquad D=\\operatorname{diag}A=-\\operatorname{diag}(d_c)",
+   "note": "$D$ is $-4$ in the interior. Move everything off the diagonal to the right-hand side.",
+   "live": null
+  },
+  {
+   "title": "The Jacobi update",
+   "tex": "D\\,p^{(k+1)}=b-(A-D)\\,p^{(k)}\\ \\Longrightarrow\\ p^{(k+1)}=p^{(k)}+D^{-1}\\big(b-Ap^{(k)}\\big)",
+   "note": "In the grid form this is the average of the four neighbours minus $b/4$ (the formula in the hero's pressure shader).",
+   "live": null
+  },
+  {
+   "title": "The error obeys a linear recursion",
+   "tex": "e^{(k+1)}=R\\,e^{(k)},\\quad R=I-D^{-1}(-A)\\ \\Longrightarrow\\ e^{(k)}=R^ke^{(0)},\\quad \\|e^{(k)}\\|\\lesssim\\rho(R)^k\\|e^{(0)}\\|",
+   "note": "Expand $e^{(0)}$ in eigenvectors of $R$: each is multiplied by its eigenvalue to the power $k$. The slowest one dominates.",
+   "live": null
+  },
+  {
+   "title": "The eigenvectors are sine waves",
+   "tex": "v_{k\\ell}(i,j)=\\sin\\frac{k\\pi i}{N+1}\\,\\sin\\frac{\\ell\\pi j}{N+1},\\qquad \\lambda_{k\\ell}=\\tfrac12\\Big(\\cos\\frac{k\\pi}{N+1}+\\cos\\frac{\\ell\\pi}{N+1}\\Big)",
+   "note": "Insert into the stencil with $p=0$ at the boundary and use $\\sin(a+b)+\\sin(a-b)=2\\sin a\\cos b$.",
+   "live": "flow?tab=matrix&m=8&bc=open"
+  },
+  {
+   "title": "The spectral radius",
+   "tex": "\\rho(R)=\\lambda_{11}=\\cos\\frac{\\pi}{N+1}\\approx1-\\frac{\\pi^2}{2(N+1)^2},\\qquad k_{\\varepsilon}=\\frac{\\ln\\varepsilon}{\\ln\\rho}",
+   "note": "The Matrix tab checks it two ways: the eigenvalues of the actual matrix agree with the cosine to 1e-13, and the measured convergence rate of a real Jacobi run agrees with it to six digits.",
+   "live": "flow?tab=matrix&m=8&bc=open"
+  },
+  {
+   "title": "Conjugate gradients, for comparison",
+   "tex": "\\|e_k\\|_A\\le2\\Big(\\frac{\\sqrt\\kappa-1}{\\sqrt\\kappa+1}\\Big)^k\\|e_0\\|_A,\\qquad k_\\varepsilon\\approx\\tfrac12\\sqrt\\kappa\\,\\ln\\frac2\\varepsilon",
+   "note": "With $\\kappa=1712$ for N = 64 that is about 157 steps for $10^{-3}$, against 5912 for Jacobi.",
+   "live": "flow?tab=dash&iters=40&solver=cg"
+  }
+ ],
+ "apply": {
+  "worked": {
+   "title": "How many Jacobi sweeps to reduce the error by 1000 on the home grid?",
+   "problem": "The hero's pressure grid is 128 by 128 in its second tier and 64 by 64 in its smallest. For the 64 by 64 open grid, compute the Jacobi spectral radius, the number of sweeps for a factor 1000 and the reduction after 20 sweeps. Compare with CG.",
+   "solution": [
+    {
+     "text": "Spectral radius.",
+     "tex": "\\rho=\\cos\\frac{\\pi}{65}=0.998832"
+    },
+    {
+     "text": "Sweeps for a factor $10^{-3}$.",
+     "tex": "k=\\frac{\\ln10^{-3}}{\\ln\\rho}=5912"
+    },
+    {
+     "text": "Error left after 20 sweeps in the slowest mode.",
+     "tex": "\\rho^{20}=0.9769"
+    },
+    {
+     "text": "CG: the condition number is $\\kappa=\\cot^2(\\pi/130)=1712$, so about",
+     "tex": "k\\approx\\tfrac12\\sqrt{\\kappa}\\ln2000=157"
+    }
+   ],
+   "answer": "rho = 0.998832; about 5912 sweeps for a factor 1000; 20 sweeps leave 0.977 of the slowest error; CG needs about 157 steps. The code below checks the first two against the actual matrix."
+  },
+  "code": "import numpy as np\n\ndef jacobi_matrix_eigs(N):\n    \"\"\"eigenvalues of R = I - D^-1 (-A) for the open N x N 5-point Laplacian\"\"\"\n    n = N * N\n    A = np.zeros((n, n))\n    for j in range(N):\n        for i in range(N):\n            c = j * N + i\n            A[c, c] = -4.0\n            for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1)):\n                if 0 <= i + di < N and 0 <= j + dj < N:\n                    A[c, (j + dj) * N + i + di] = 1.0\n    R = np.eye(n) + A / 4.0                      # I - D^-1 (-A) with D = -4 I ... R = I + A/4\n    return np.linalg.eigvals(R).real\n\nfor N in (6, 8, 12):\n    rho = np.max(np.abs(jacobi_matrix_eigs(N)))\n    print(N, rho, np.cos(np.pi / (N + 1)), \"sweeps for 1e-3:\", np.log(1e-3) / np.log(rho))\nN = 64\nrho = np.cos(np.pi / (N + 1))\nprint(\"N = 64: rho\", rho, \"sweeps for 1e-3\", np.log(1e-3) / np.log(rho), \"20 sweeps:\", rho ** 20)\n"
+ },
+ "analyze": [
+  {
+   "q": "Why does the number of Jacobi sweeps needed grow like $N^2$ while the cost of one sweep grows like $N^2$ as well? What is the total work as a function of N?",
+   "hint": "$1-\\rho\\approx\\pi^2/(2(N+1)^2)$, so the sweeps for a fixed reduction scale as $N^2$; one sweep touches $N^2$ cells."
+  },
+  {
+   "q": "Jacobi is perfectly parallel and Gauss-Seidel is twice as fast per sweep. Why do the hero's shaders use Jacobi?",
+   "hint": "A fragment shader writes every pixel of one texture from the pixels of another. What does Gauss-Seidel need that a shader cannot give it?"
+  },
+  {
+   "q": "The residual after 24 iterations of CG was 0.77 and of Jacobi 0.25 on the same cold start, but after 200 iterations CG was ahead by a factor 28. Explain.",
+   "hint": "CG minimises the A-norm of the error over a growing Krylov space. The 2-norm of the residual is not monotone."
+  }
+ ],
+ "evaluate": [
+  {
+   "q": "The hero spends 6 to 24 sweeps per frame. Is it reasonable to call its pressure 'solved'? What does it deliver instead?",
+   "hint": "With the plume field the divergence after the projection was 0.55, 0.51 and 0.51 of before for 6, 24 and 80 sweeps: the results hardly differ."
+  },
+  {
+   "q": "You want a pressure solve for a 512 by 512 simulation that is exact to 1e-6 every frame. Which method would you pick and why?",
+   "hint": "Compare Jacobi, CG with a preconditioner, and multigrid for the cost per frame and for how well each maps to a GPU."
+  }
+ ],
+ "create": [
+  "Add a weighted Jacobi option (omega = 0.8) to the Flow workspace and predict how the residual curve changes at low iteration counts before you try it.",
+  "Design a measurement of the effective iteration count the hero needs so that the divergence after the projection stops improving. What would you plot against what?"
+ ],
+ "checks": [
+  {
+   "tier": "understand",
+   "q": "Why does Jacobi converge slowly on a large grid, in words?",
+   "hint": "How far does information travel in one sweep?",
+   "answer": "A cell hears only from its four neighbours each sweep, so information crosses the grid at one cell per sweep. The smooth, long-wavelength part of the error needs to spread over the whole grid and decays by only a factor just below one per sweep, cos(pi/(N+1)), so thousands of sweeps are needed on a grid that is tens of cells wide."
+  },
+  {
+   "tier": "apply",
+   "q": "What is the Jacobi spectral radius for the 64 by 64 open grid, and how many sweeps reduce the error by 1000?",
+   "hint": "cos(pi/65); ln(1e-3)/ln(rho).",
+   "answer": "rho = 0.998832; k = 5912 sweeps."
+  },
+  {
+   "tier": "analyze",
+   "q": "In the Flow workspace the plume scene's cold-start Jacobi rate was measured at 0.999849 per sweep, not 0.998832. Why?",
+   "hint": "The plume box has walls on three sides and an open top: a different boundary rule from the closed Dirichlet box.",
+   "answer": "With walls on three sides the slowest mode needs only a quarter wave across the box instead of a half wave, and the closed form becomes (1 + cos(pi/(2N+1)))/2 = 0.999852 for N = 64, which matches the measured 0.999849 to 3e-6. Fewer open sides means a slower solve: the home-page geometry is about 8 times slower than the all-open box."
+  },
+  {
+   "tier": "evaluate",
+   "q": "After 200 sweeps from zero the Flow solver's relative residual on the plume field was 0.12 for Jacobi and 0.0042 for CG. A reviewer says: this shows Jacobi is a bad solver. Is that the right conclusion for the hero?",
+   "hint": "The hero solves a warm-started problem for a few iterations a frame and only needs a smooth pressure.",
+   "answer": "Not by itself. For a full solve to a small residual CG is far better (by a factor of about 28 here at 200 iterations, and the gap widens). But the hero needs only a smooth pressure that changes slowly from frame to frame, a few Jacobi sweeps from a warm start do that, each sweep is one cheap shader pass with no global dot products (which CG needs and a GPU does badly), and the divergence after the projection hardly improves with more iterations because of the stencil floor."
+  },
+  {
+   "tier": "create",
+   "q": "Design a fair benchmark of Jacobi against CG for this workspace that accounts for the cost of one iteration.",
+   "hint": "Count operations, not iterations.",
+   "answer": "Count matrix-vector products and dot products: a Jacobi sweep is one stencil pass, a CG step is one stencil pass plus two dot products and three vector updates, about twice the work of a sweep. Plot the residual against work in units of one stencil pass, from a cold start and from the warm start, for several grid sizes and both boundary rules, and report the work to reach 1e-3 and 1e-6. The curves of this page, redrawn with CG's x axis doubled, are the first version."
+  }
+ ],
+ "values": [
+  {
+   "label": "Jacobi spectral radius, open N x N grid: N = 6, 32, 64, 96",
+   "value": "0.900969, 0.995472, 0.998832, 0.999476",
+   "from": "tools/flow_numbers.py (numpy / sympy) (cos(pi/(N+1)))"
+  },
+  {
+   "label": "Sweeps for an error factor 1e-3: N = 6, 32, 64, 96",
+   "value": "66, 1522, 5912, 13168",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Error left after 20 sweeps in the slowest mode, N = 64",
+   "value": "0.9769",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "rho of the actual matrix against cos(pi/(N+1)), N = 3 to 12",
+   "value": "agree to 4.8e-14",
+   "from": "tests/js/flow_operator_test.mjs (symmetric eigenvalue solve of the dense matrix)"
+  },
+  {
+   "label": "Gauss-Seidel: rho and sweeps for 1e-3, N = 64",
+   "value": "0.997666, 2956",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "SOR: optimal omega, rho and sweeps for 1e-3, N = 64",
+   "value": "1.9078, 0.9078, 71",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Condition number and CG steps for 1e-3, N = 64",
+   "value": "1712, 157",
+   "from": "tools/flow_numbers.py (numpy / sympy) (cot^2(pi/130), 0.5 sqrt(kappa) ln 2000)"
+  },
+  {
+   "label": "Smoothing factor over the high frequencies, N = 64: plain Jacobi, weighted omega = 0.8",
+   "value": "0.99883, 0.5991",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Bound on the relative error from a residual of 1e-3, N = 64",
+   "value": "1.71",
+   "from": "tools/flow_numbers.py (numpy / sympy) (kappa x 1e-3)"
+  },
+  {
+   "label": "Plume scene (walls + open top), N = 64: closed-form rho and measured late rate",
+   "value": "0.9998517 and 0.9998494",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js) (12000 cold-start sweeps)"
+  },
+  {
+   "label": "Plume field, cold start, residual after 24 and after 200 iterations: Jacobi",
+   "value": "0.252 and 0.116",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "Same, conjugate gradients",
+   "value": "0.772 and 0.00415",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  }
+ ],
+ "live": [
+  {
+   "route": "flow?tab=dash&iters=20&view=pressure",
+   "label": "Flow: residual plot at 20 iterations",
+   "static_ok": true
+  },
+  {
+   "route": "flow?tab=matrix&m=8&bc=open",
+   "label": "Flow: Jacobi spectral radius of the 64 by 64 matrix (an 8 by 8 grid), open sides",
+   "static_ok": true
+  },
+  {
+   "route": "flow?tab=dash&iters=40&solver=cg",
+   "label": "Flow: conjugate gradients, 40 iterations",
+   "static_ok": true
+  }
+ ],
+ "related": [
+  "concept.flow.projection-and-the-pressure-poisson-matrix",
+  "concept.flow.navier-stokes-and-incompressibility",
+  "concept.stiffness-stability-and-neural-odes"
+ ],
+ "cite": [
+  "trefethen1997",
+  "press2007"
+ ],
+ "provenance": {
+  "author": "agent (Claude), WP-A2",
+  "opened_image": "media/flow/flow-residual_dark.webp",
+  "reviewed_by_owner": false,
+  "date": "2026-10-06"
+ }
+}

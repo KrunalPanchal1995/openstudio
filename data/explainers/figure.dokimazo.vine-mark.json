@@ -1,0 +1,183 @@
+{
+ "id": "figure.dokimazo.vine-mark",
+ "title": "A topology-optimisation picture is a load path: reading the project's vine mark",
+ "summary": "The project's mark is the material layout from a compliance-minimising topology optimisation: a branching structure that carries a distributed load into a single support. Read as a structure, it shows where material is needed; as an emblem, it is a human choice of ink and typography.",
+ "media": {
+  "kind": "image",
+  "src": "assets/img/projects/dokimazo/15_15_vine_mark-800.png",
+  "alt": "A dark green branching structure on a pale background: a wide top bar from which several branches run down and inward, merging into a single thick trunk at the bottom, with white voids between the branches.",
+  "video": "assets/img/projects/dokimazo/14_14_logo_topopt_poster.mp4",
+  "poster": "assets/img/projects/dokimazo/14_14_logo_topopt_poster-800.png"
+ },
+ "source": {
+  "project": "dokimazo",
+  "file": "15_15_vine_mark",
+  "caption": "The bare vine mark",
+  "group": [
+   "14_14_logo_topopt_poster: the converged material field with a scripture quotation and the title line 'SIMP compliance minimization, converged, compliance=10.916' (a video of the optimisation, poster frame)",
+   "15_15_vine_mark: the same material field alone on a transparent background, the logo asset (representative)"
+  ],
+  "note": "Decorative and identity figures. The captions state that the geometry is solver output and the ink colour and typography are a human choice. Only the generic reading is taught here.",
+  "project_title": "dokimazo — A PIDO Optimization Workbench",
+  "project_url": "/projects/dokimazo/",
+  "figures": [
+   "dokimazo/14_14_logo_topopt_poster",
+   "dokimazo/15_15_vine_mark"
+  ]
+ },
+ "plot_classes": [],
+ "read_the_figure": {
+  "question": "Where does the structure put material, and why does it branch?",
+  "axes": "No axes. The picture is a two-dimensional design domain: the top edge carries a distributed load, the bottom centre is the support, and darkness is material density (dark is solid, white is void).",
+  "look_at": [
+   "Dark members are the load paths: material is kept where internal force is carried.",
+   "The branches merge towards the support, because forces from many points must combine into one reaction.",
+   "White voids are regions where material would add weight but little stiffness.",
+   "Soft, blurred edges are intermediate densities of the numerical method, or image scaling, not a drawn effect."
+  ],
+  "proves": "That a compliance-minimising solver, given a distributed load and a single support, produces a branching, tree-like layout. It is an illustration, not evidence of a performance gain.",
+  "if_wrong": [
+   "A symmetric layout from asymmetric loads would suggest an imposed symmetry.",
+   "Thick grey areas mean unconverged or filtered densities."
+  ],
+  "must_check": [
+   "The load and support positions are stated; here the title and caption describe them in words only.",
+   "The compliance value is quoted only for its own problem: 10.916 is not comparable with other figures' numbers.",
+   "It is stated what is solver output and what is a human choice."
+  ],
+  "as_drawn": [
+   "The poster frame prints compliance 10.916 in its title. It belongs to this problem only.",
+   "The symmetric branching is consistent with a symmetric load and a centred support; the figure does not give the mesh or the volume fraction."
+  ]
+ },
+ "terms": [
+  {
+   "term": "Topology optimisation",
+   "meaning": "Choosing where to put material in a domain to optimise a performance measure under a material budget."
+  },
+  {
+   "term": "SIMP",
+   "meaning": "A density-based method where stiffness scales as density raised to a power greater than one, so intermediate densities are discouraged.",
+   "symbol": "E_e=\\rho_e^{\\,p}E_0"
+  },
+  {
+   "term": "Compliance",
+   "meaning": "Load times displacement; lower is stiffer.",
+   "symbol": "c=\\mathbf F^{\\mathsf T}\\mathbf u"
+  },
+  {
+   "term": "Load path",
+   "meaning": "The route by which a force travels through a structure to the support."
+  }
+ ],
+ "remember": [
+  "Dark is material, white is void.",
+  "Branching appears where many loads must combine into one support.",
+  "Compliance numbers belong to their own problem.",
+  "Solver output and human styling are different things; say which is which."
+ ],
+ "steps": [
+  {
+   "title": "The objective that makes branches",
+   "tex": "\\min_{\\boldsymbol\\rho}\\ c=\\mathbf F^{\\mathsf T}\\mathbf u\\quad\\text{s.t.}\\quad\\mathbf K(\\boldsymbol\\rho)\\mathbf u=\\mathbf F,\\ \\sum_e v_e\\rho_e\\le V",
+   "note": "Under a fixed material budget, the stiffest layout concentrates material along the lines of force; a distributed load into a single support yields a tree. The same problem is treated in the topology-optimisation comparison figures.",
+   "live": null
+  }
+ ],
+ "apply": {
+  "worked": {
+   "title": "Why a single support produces a single trunk",
+   "problem": "A load spread along the top edge is carried to one support point. Why must the cross-section of material grow towards the support?",
+   "solution": [
+    {
+     "text": "Force balance: the vertical force carried grows as more loads are collected.",
+     "tex": "F_{\\mathrm{trunk}}=\\sum_i F_i"
+    },
+    {
+     "text": "For a bar of fixed strength the area needed is proportional to the force.",
+     "tex": "A\\propto F"
+    }
+   ],
+   "answer": "Each branch carries the load collected so far, so the member widens as branches join, giving the thick trunk at the support."
+  },
+  "code": ""
+ },
+ "analyze": [
+  {
+   "q": "What would change in the layout if the support were moved from the centre to a corner?",
+   "hint": "Where do the load paths have to end?"
+  }
+ ],
+ "evaluate": [
+  {
+   "q": "Is the mark's compliance number a useful quality statistic? What would you need to compare it with?",
+   "hint": "A baseline layout for the same problem."
+  }
+ ],
+ "create": [
+  "Redraw the mark with the load arrows along the top edge and the support symbol at the bottom, so the reader can see which forces the branches carry."
+ ],
+ "checks": [
+  {
+   "tier": "understand",
+   "q": "What do white regions mean in a topology-optimisation picture?",
+   "hint": "Density zero.",
+   "answer": "Void: places where the solver decided material adds little stiffness for its weight."
+  },
+  {
+   "tier": "apply",
+   "q": "Three equal loads of 2 kN merge into one trunk. What load does the trunk carry?",
+   "hint": "Sum them.",
+   "answer": "6 kN."
+  },
+  {
+   "tier": "analyze",
+   "q": "Why do branches merge towards the support?",
+   "hint": "Where does the force have to go?",
+   "answer": "All loads must end at the support, so branches collect and combine their forces on the way, which makes the structure converge to a single trunk."
+  },
+  {
+   "tier": "evaluate",
+   "q": "Why should an emblem made from solver output still state what was a human choice?",
+   "hint": "Honest provenance.",
+   "answer": "Because the geometry is the solver's, but colour, typography and cropping are decisions. Saying so keeps the claim of 'generated, not drawn' accurate."
+  },
+  {
+   "tier": "create",
+   "q": "What would you add so the picture teaches the load path?",
+   "hint": "Arrows.",
+   "answer": "Draw the distributed load arrows on the top edge, mark the support at the bottom centre, and colour the members by internal force."
+  }
+ ],
+ "values": [
+  {
+   "label": "Compliance (poster frame)",
+   "value": "10.916",
+   "from": "printed in the title of the poster frame"
+  }
+ ],
+ "live": [
+  {
+   "route": "atlas?ch=S13&ex=1",
+   "label": "Climbing a hill along the gradient",
+   "static_ok": true
+  }
+ ],
+ "related": [
+  "concept.optimization-landscapes-optimizers-and-pareto-fronts",
+  "figure.dokimazo.topopt-gradient-vs-heuristics"
+ ],
+ "cite": [],
+ "provenance": {
+  "author": "agent",
+  "opened_image": "2026-10-06, original poster frame of the logo video and the original bare mark, read at full size",
+  "reviewed_by_owner": false,
+  "date": "2026-10-06",
+  "notes": "Decorative figure; short on purpose. Standard theory only. The scripture quotation in the project caption is not reproduced here. Owner to confirm that the generic reading is enough and the problem set-up (load, support, mesh) if a fuller reading is wanted."
+ },
+ "type": "figure",
+ "status": "full",
+ "subjects": [
+  "optimization"
+ ]
+}

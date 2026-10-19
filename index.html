@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>openstudio</title>
+  <meta name="description" content="A visual studio for mathematics, science and engineering: subjects, explained figures and live instruments. Runs fully in the browser.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e7c86'/%3E%3Cpath d='M6 22 C12 4 18 28 26 10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles/studio.css">
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <script>
+    // set the theme before first paint (?theme=, stored choice, else the OS setting)
+    (function () {
+      var t = null;
+      try { t = new URLSearchParams(location.search).get("theme") || localStorage.getItem("openstudio-theme"); } catch (e) {}
+      if (t !== "dark" && t !== "light") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip" href="#view">Skip to content</a>
+  <header class="bar" id="bar">
+    <a class="brand" href="#subjects" aria-label="openstudio home"><span class="brand__mark" aria-hidden="true">∿</span> openstudio</a>
+    <nav class="nav" aria-label="Main">
+      <a href="#subjects" data-nav="subjects">Subjects</a>
+      <a href="#workspaces" data-nav="workspaces">Instruments</a>
+      <a href="#search" data-nav="search">Search</a>
+    </nav>
+    <form class="bar__search" role="search" id="quick">
+      <label class="sr" for="q">Search lessons and presets</label>
+      <input id="q" type="search" placeholder="Search lessons and presets" autocomplete="off">
+    </form>
+    <button type="button" class="chip" id="theme" aria-label="Toggle light and dark theme">Theme</button>
+  </header>
+  <main id="view" tabindex="-1" aria-live="polite"></main>
+  <footer class="foot">
+    <span>openstudio · runs fully in your browser · no server, no tracking</span>
+    <a href="https://github.com/KrunalPanchal1995/openstudio">Source</a>
+    <a href="https://krunalpanchal1995.github.io/">Main site</a>
+  </footer>
+  <script type="module" src="src/main.js"></script>
+  <noscript><p class="noscript">openstudio needs JavaScript.</p></noscript>
+</body>
+</html>

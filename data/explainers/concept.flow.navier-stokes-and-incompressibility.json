@@ -1,0 +1,329 @@
+{
+ "id": "concept.flow.navier-stokes-and-incompressibility",
+ "type": "concept",
+ "status": "full",
+ "title": "Incompressible flow: the velocity must have zero divergence, and the pressure is whatever enforces it",
+ "summary": "Water and slow air do not compress, so the velocity field has zero divergence at every instant. Pressure has no equation of its own: it is the field whose gradient, subtracted from the velocity, removes whatever divergence the other terms create. Splitting a time step into 'move things around' and 'project onto the divergence-free fields' is the idea behind the home-page hero and behind the Flow workspace.",
+ "subjects": [
+  "cfd-numerics"
+ ],
+ "media": {
+  "kind": "image",
+  "src": "media/flow/flow-projection_dark.webp",
+  "src_light": "media/flow/flow-projection_light.webp",
+  "alt": "Flow workspace, scene Projection test, showing the divergence of the velocity field after the projection: a faint ring of blue and rose cells around the centre on a dark square.",
+  "caption": "Screenshot of the Flow workspace (scene 4, divergence view). A spreading source and a swirl were put in; the projection has removed the source, so what is left of the divergence is small."
+ },
+ "source": {
+  "note": "Standard theory (Chorin's projection method, Stam's stable fluids, Fedkiw, Stam and Jensen's vorticity confinement, Jacobi and conjugate-gradient iteration). No project result is quoted. Every number on this page was computed with numpy / sympy or measured on the Flow workspace's own solver by tools/flow_numbers.py and tools/flow_numbers.mjs, and the picture is a screenshot of that workspace."
+ },
+ "plot_classes": [],
+ "read_the_figure": {
+  "question": "After a pressure projection, how much of the velocity's divergence is left, and where?",
+  "axes": "The square is the simulation box (x to the right, y up). Colour is the divergence of the velocity after the projection: rose negative (a sink), blue positive (a source), dark near zero. The scale is set by the largest value on screen, so the colour alone does not say how large the divergence is.",
+  "look_at": [
+   "Whether the colours are concentrated or spread evenly: a left-over divergence that follows the cell grid is a discretisation effect, not a physical source.",
+   "The Dashboard numbers beside the picture: max divergence before and after the projection.",
+   "Whether the swirl is still there when the Show menu is switched to vorticity: the projection must not touch it."
+  ],
+  "proves": "That the incompressibility constraint was imposed to the accuracy the pressure solver reached, not that the flow is physically right.",
+  "if_wrong": [
+   "A colour scale that is silently re-normalised each frame makes a tiny divergence look as dramatic as a large one: read the numbers, not only the colours.",
+   "Looking at the divergence of the velocity before the projection and calling it the result: only the after-field matters."
+  ],
+  "must_check": [
+   "Which stencil the divergence was computed with (here central differences over two cells).",
+   "The number of pressure iterations and the solver (Jacobi or conjugate gradients).",
+   "The boundary condition on every side."
+  ]
+ },
+ "terms": [
+  {
+   "term": "Velocity field",
+   "meaning": "The velocity of the fluid at every point and time. On the grid it is stored at the cell centres, in domain lengths per second.",
+   "symbol": "u(x,t)=(u,v)"
+  },
+  {
+   "term": "Pressure",
+   "meaning": "A scalar field whose gradient pushes the fluid. In incompressible flow it adjusts instantly so that the velocity stays divergence free.",
+   "symbol": "p(x,t)"
+  },
+  {
+   "term": "Divergence",
+   "meaning": "The net outflow per unit volume at a point: positive where fluid spreads out, negative where it gathers. Zero everywhere means no volume is created or destroyed.",
+   "symbol": "\\nabla\\!\\cdot u=\\partial_x u+\\partial_y v"
+  },
+  {
+   "term": "Incompressible",
+   "meaning": "The volume of a fluid parcel does not change as it moves, so the velocity field is divergence free.",
+   "symbol": "\\nabla\\!\\cdot u=0"
+  },
+  {
+   "term": "Advection term",
+   "meaning": "The part of the momentum equation that carries the velocity along with itself. It is the only nonlinear term.",
+   "symbol": "(u\\!\\cdot\\!\\nabla)u"
+  },
+  {
+   "term": "Kinematic viscosity",
+   "meaning": "How fast momentum diffuses, in length squared per time. Air at 20 degrees C has about 1.5e-5 m^2/s, water about 1.0e-6.",
+   "symbol": "\\nu"
+  },
+  {
+   "term": "Reynolds number",
+   "meaning": "The ratio of inertial to viscous effects for a flow of speed U over a length L. Large values mean thin boundary layers and eddies.",
+   "symbol": "\\mathrm{Re}=\\frac{UL}{\\nu}"
+  },
+  {
+   "term": "Helmholtz-Hodge decomposition",
+   "meaning": "Any smooth vector field splits into a divergence-free part plus the gradient of a scalar. The two parts are orthogonal when the boundary condition is right.",
+   "symbol": "u^*=w+\\nabla\\phi,\\ \\nabla\\!\\cdot w=0"
+  },
+  {
+   "term": "Projection",
+   "meaning": "The operator that keeps the divergence-free part and throws the gradient part away. Pressure is how it is computed.",
+   "symbol": "\\mathbb P\\,u^*=w"
+  },
+  {
+   "term": "Boundary condition",
+   "meaning": "What the fluid does at the edge: a wall allows no flow through it (slip: sliding along it is free; no-slip: velocity zero), an open side lets the flow out with the pressure fixed.",
+   "symbol": "u\\!\\cdot\\!n=0,\\quad p=0"
+  }
+ ],
+ "remember": [
+  "Momentum: $\\partial_t u+(u\\!\\cdot\\!\\nabla)u=-\\tfrac1\\rho\\nabla p+\\nu\\nabla^2u+f$. Constraint: $\\nabla\\!\\cdot u=0$.",
+  "In two dimensions there are three unknowns ($u$, $v$, $p$) and three equations (two momentum components and the constraint). On a 64 by 64 grid that is 12,288 unknowns.",
+  "Pressure has no time derivative and no equation of its own: it is a Lagrange multiplier for the constraint.",
+  "Every field splits as $u^*=w+\\nabla\\phi$ with $\\nabla\\!\\cdot w=0$; the projection returns $w$.",
+  "A stream function gives a divergence-free field for free: $u=\\partial_y\\psi,\\ v=-\\partial_x\\psi\\ \\Rightarrow\\ \\nabla\\!\\cdot u=0$. A swirl is untouched by the projection; a pure expansion is removed completely.",
+  "Reynolds number $\\mathrm{Re}=UL/\\nu$: about 6596 for 1 m/s of air over 0.1 m, about 99602 for water, 250 for the lid-driven cavity scene."
+ ],
+ "understand": [
+  {
+   "title": "Easy: a corridor where nobody can be squeezed",
+   "text": "Picture a crowded corridor. If the people at one end push forward, everyone ahead has to move at once, and if a gap opens somewhere someone has to fill it. Incompressible fluid is that corridor: volume cannot be created or destroyed, so the velocity field can have no source and no sink. Pressure is the invisible hand that passes a push along instantly."
+  },
+  {
+   "title": "Medium: three unknowns, three equations",
+   "text": "Divergence measures the net outflow per volume. A swirl has none: what leaves one side comes back on the other. An expanding blob has positive divergence. The two momentum equations tell how the velocity changes, but they know nothing about the constraint, so after a step the field is no longer divergence free. The third equation, $\\nabla\\!\\cdot u=0$, fixes the pressure: it must be exactly the field that cancels the divergence the step created."
+  },
+  {
+   "title": "Hard: the projection keeps the swirl and removes the push",
+   "text": "Write the predicted velocity as a divergence-free part plus a gradient, $u^*=w+\\nabla\\phi$. Subtracting $\\nabla\\phi$ leaves $w$, and finding $\\phi$ means solving a Poisson equation with the divergence of $u^*$ on the right. In the Projection test scene a spreading source and a swirl were added together. With an exact solve the projection removed 59.0 % of the kinetic energy (0.001533 to 0.0006284) and left the swirl alone."
+  },
+  {
+   "title": "Hardest: divergence free on a grid is a different statement",
+   "text": "On a grid the divergence is a finite difference. With central differences, $\\nabla\\!\\cdot(\\nabla^\\perp\\psi)$ is zero to rounding (2.8e-17 in the solver), so swirls are exactly invisible to the projection. But the pressure is found from the compact five-point Laplacian, whereas the divergence of the gradient, with the same central differences, is a wider stencil (spacing two cells). They agree for smooth pressure and disagree for rough pressure, so even an exact solve leaves a floor: 0.0024 of the original divergence for a smooth field, about half for the rough plume field. A staggered grid removes the mismatch; the hero keeps the collocated grid for speed and simplicity."
+  }
+ ],
+ "steps": [
+  {
+   "title": "Mass is conserved",
+   "tex": "\\frac{d}{dt}\\int_V\\rho\\,dV=-\\oint_{\\partial V}\\rho\\,u\\!\\cdot\\!n\\,dS\\ \\Rightarrow\\ \\partial_t\\rho+\\nabla\\!\\cdot(\\rho u)=0",
+   "note": "For constant density this is $\\nabla\\!\\cdot u=0$: the net flux through any closed surface is zero.",
+   "live": null
+  },
+  {
+   "title": "Momentum balance for a fluid parcel",
+   "tex": "\\partial_t u+(u\\!\\cdot\\!\\nabla)u=-\\frac1\\rho\\nabla p+\\nu\\nabla^2u+f",
+   "note": "Newton's second law per unit mass: the pressure gradient, the viscous diffusion of momentum and a body force $f$ (gravity, buoyancy) accelerate the parcel.",
+   "live": null
+  },
+  {
+   "title": "Take the divergence of the momentum equation",
+   "tex": "\\nabla^2p=-\\rho\\,\\nabla\\!\\cdot\\big((u\\!\\cdot\\!\\nabla)u\\big)+\\rho\\,\\nabla\\!\\cdot f",
+   "note": "Using $\\nabla\\!\\cdot u=0$ at all times: the time derivative and the viscous term drop out (the divergence commutes with the Laplacian). Pressure obeys a Poisson equation whose source is made of the other terms.",
+   "live": null
+  },
+  {
+   "title": "Split the time step (Chorin)",
+   "tex": "u^*=u^n+\\Delta t\\big(-(u^n\\!\\cdot\\!\\nabla)u^n+\\nu\\nabla^2u^n+f\\big),\\quad \\nabla^2p=\\frac{\\rho}{\\Delta t}\\nabla\\!\\cdot u^*,\\quad u^{n+1}=u^*-\\frac{\\Delta t}{\\rho}\\nabla p",
+   "note": "First move the fluid as if it could be compressed, then project. The Flow workspace does the first part with Stam's semi-Lagrangian advection and the forces of the hero.",
+   "live": null
+  },
+  {
+   "title": "Why the projection is a projection",
+   "tex": "\\nabla\\!\\cdot u^{n+1}=\\nabla\\!\\cdot u^*-\\frac{\\Delta t}{\\rho}\\nabla^2p=0,\\qquad \\int_V w\\!\\cdot\\!\\nabla\\phi\\,dV=-\\int_V\\phi\\,\\nabla\\!\\cdot w\\,dV+\\oint_{\\partial V}\\phi\\,w\\!\\cdot\\!n\\,dS=0",
+   "note": "The second identity says that divergence-free fields tangent to the walls are orthogonal to gradients, so what is subtracted is exactly the gradient part and nothing else.",
+   "live": null
+  },
+  {
+   "title": "On the grid: one sparse linear system",
+   "tex": "A\\,p=b,\\qquad b_c=\\tfrac12\\big(u_{R}-u_{L}+v_{T}-v_{B}\\big)_c,\\qquad u^{n+1}_c=u^*_c-\\tfrac12\\big(p_R-p_L,\\ p_T-p_B\\big)_c",
+   "note": "The same three passes as the hero's divergence, pressure and gradient shaders. Open the scene to see the divergence before and after.",
+   "live": "flow?preset=4&view=divergence"
+  }
+ ],
+ "apply": {
+  "worked": {
+   "title": "Project a field by hand, then check it with an FFT",
+   "problem": "In the periodic box $[0,2\\pi)^2$ the predicted velocity is $u^*=(\\sin x+\\sin y,\\ 0)$. Find the divergence-free velocity after the projection and the kinetic energy it keeps.",
+   "solution": [
+    {
+     "text": "Divergence of $u^*$: only $\\partial_x u$ contributes, since $v=0$.",
+     "tex": "\\nabla\\!\\cdot u^*=\\cos x"
+    },
+    {
+     "text": "Solve $\\nabla^2\\phi=\\cos x$. A function of $x$ alone with $\\phi''=\\cos x$ is",
+     "tex": "\\phi=-\\cos x"
+    },
+    {
+     "text": "Its gradient is the part to remove.",
+     "tex": "\\nabla\\phi=(\\sin x,\\ 0)"
+    },
+    {
+     "text": "Subtract it.",
+     "tex": "u=u^*-\\nabla\\phi=(\\sin y,\\ 0)"
+    },
+    {
+     "text": "Check: $u$ depends only on $y$ and has no $y$ component, so its divergence is zero. The kinetic energy per unit area falls from $\\tfrac12(\\tfrac12+\\tfrac12)$ to $\\tfrac12\\cdot\\tfrac12$.",
+     "tex": "\\tfrac12\\langle|u^*|^2\\rangle=0.5\\ \\longrightarrow\\ \\tfrac12\\langle|u|^2\\rangle=0.25"
+    }
+   ],
+   "answer": "The projected velocity is $(\\sin y,\\ 0)$, a shear flow, and the kinetic energy halves (0.5 to 0.25). The numpy FFT code below gives the same: error 5.6e-16, energies 0.5 and 0.25, divergence after 5e-15."
+  },
+  "code": "import numpy as np\n\n# periodic box [0, 2 pi)^2, 64 x 64 cells; the predicted velocity u* = (sin x + sin y, 0)\nN = 64\nx = (np.arange(N) + 0.5) / N * 2 * np.pi\nX, Y = np.meshgrid(x, x)\nu, v = np.sin(X) + np.sin(Y), np.zeros((N, N))\n\nk = np.fft.fftfreq(N, d=1 / N)\nKX, KY = np.meshgrid(k, k)\nk2 = KX**2 + KY**2\nk2[0, 0] = 1.0                                    # the constant mode has no pressure\n\nuh, vh = np.fft.fft2(u), np.fft.fft2(v)\ndiv_h = 1j * KX * uh + 1j * KY * vh               # divergence of u*\nphi_h = div_h / (-k2)                             # Poisson:  laplacian(phi) = div u*\nphi_h[0, 0] = 0\nun = np.real(np.fft.ifft2(uh - 1j * KX * phi_h))  # u = u* - grad(phi)\nvn = np.real(np.fft.ifft2(vh - 1j * KY * phi_h))\n\nprint(\"max |u - sin y| + max |v| =\", np.max(np.abs(un - np.sin(Y))) + np.max(np.abs(vn)))\nprint(\"kinetic energy before, after:\", 0.5 * np.mean(u**2 + v**2), 0.5 * np.mean(un**2 + vn**2))\n"
+ },
+ "analyze": [
+  {
+   "q": "Why is the swirl $u=(-y,x)$ unchanged by the projection while $u=(x,y)$ is removed completely?",
+   "hint": "Compute the divergence and the curl of each. The first has zero divergence; the second is the gradient of $(x^2+y^2)/2$."
+  },
+  {
+   "q": "Show that a gradient field $\\nabla\\phi$ carries no circulation, so the projection can never remove a vortex.",
+   "hint": "The circulation $\\oint\\nabla\\phi\\cdot dl$ around a closed loop is the net change of $\\phi$, which is zero."
+  },
+  {
+   "q": "Two equal jets collide head on. What does the Poisson equation say about the pressure at the stagnation point, and why does the fluid turn sideways?",
+   "hint": "The right-hand side contains $-\\rho\\nabla\\!\\cdot((u\\!\\cdot\\!\\nabla)u)$. Near a stagnation point $u\\approx(-ax,\\ ay)$; evaluate it. Pressure rises to slow the streams and its gradient pushes them out sideways."
+  }
+ ],
+ "evaluate": [
+  {
+   "q": "A friend says incompressible means the density is the same everywhere. Is that right?",
+   "hint": "Think of a smoke plume. The density varies in space (hot gas is lighter) but each parcel keeps its density as it moves, $D\\rho/Dt=0$. In the Boussinesq model the variation appears only in the buoyancy force."
+  },
+  {
+   "q": "At what speed does the assumption $\\nabla\\!\\cdot u=0$ stop being a good one for air?",
+   "hint": "The density change along a streamline is of order $\\mathrm{Ma}^2/2$. At Mach 0.3 that is 4.5 %, the usual rule of thumb for the limit."
+  }
+ ],
+ "create": [
+  "Design a scene for the Flow workspace in which a missing projection is obvious at a glance (which fields, which view, which preset values?), and a second in which an under-converged projection is obvious but a missing one is not.",
+  "Replace the closed box of the projection scene by one with an open side. Predict what happens to the pressure and to the divergence at that side before you try it."
+ ],
+ "checks": [
+  {
+   "tier": "understand",
+   "q": "Why does the pressure in an incompressible flow have no time derivative and no equation of its own?",
+   "hint": "Count unknowns and equations, and ask what the third equation constrains.",
+   "answer": "In two dimensions there are three unknowns (u, v, p) and three equations: two momentum components and the constraint div u = 0. The constraint contains no pressure, so pressure is found as the field that makes the other two keep the constraint true: it is a Lagrange multiplier, and it acts instantly because the constraint must hold at every moment."
+  },
+  {
+   "tier": "apply",
+   "q": "The lid-driven cavity scene has a lid speed of 0.5 domain lengths per second, a box of side 1 and viscosity 0.002. What is its Reynolds number?",
+   "hint": "Re = U L / nu.",
+   "answer": "Re = 0.5 x 1 / 0.002 = 250."
+  },
+  {
+   "tier": "analyze",
+   "q": "A predicted velocity is u* = (sin x + sin y, 0) in a periodic box. Which part does the projection remove, and what fraction of the kinetic energy goes with it?",
+   "hint": "Compute the divergence. Then ask which of the two terms depends on the direction it points along.",
+   "answer": "The sin x term in the x velocity (divergence cos x) is a pure gradient and is removed; the sin y term is a shear with no divergence and stays. Each term carries half of the energy, so the energy falls from 0.5 to 0.25, which an FFT projection reproduces to 5.6e-16."
+  },
+  {
+   "tier": "evaluate",
+   "q": "In the Projection test scene, an exact solve cuts the maximum divergence from 0.0732 to 0.00131 but not to zero. Is the projection wrong?",
+   "hint": "Compare the compact five-point Laplacian that A is built from with the divergence of the central-difference gradient.",
+   "answer": "No. It removed 98.2 % of the divergence. The pressure is found from the compact five-point Laplacian but subtracted with central differences, whose divergence is a wider stencil, so a floor of rough-field divergence remains even for an exact solve (0.0024 of the original for a smooth field, about 0.5 for the plume field). A staggered grid has no such floor."
+  },
+  {
+   "tier": "create",
+   "q": "Describe an experiment on the Flow workspace that separates the error from too few pressure iterations from the error from the stencil mismatch.",
+   "hint": "One of them changes when the iteration count changes; the other does not.",
+   "answer": "Run the Projection test scene and vary the pressure iterations from 1 to 80, then switch to conjugate gradients with the same counts. The divergence after the projection keeps falling with the iteration count while the solve is unconverged (the residual plot shows this) and then stops at a floor that no iteration count lowers: that floor is the stencil mismatch. Repeating on a smooth initial field lowers the floor, which shows it depends on the roughness of the pressure."
+  }
+ ],
+ "values": [
+  {
+   "label": "Unknowns on a 64 by 64 grid",
+   "value": "12,288",
+   "from": "3 x 64 x 64"
+  },
+  {
+   "label": "Reynolds number, air 1 m/s over 0.1 m (nu = 1.516e-5 m^2/s)",
+   "value": "6596",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Reynolds number, water 1 m/s over 0.1 m (nu = 1.004e-6 m^2/s)",
+   "value": "99602",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Reynolds number, cavity scene (U = 0.5, L = 1, nu = 0.002)",
+   "value": "250",
+   "from": "tools/flow_numbers.py (numpy / sympy)"
+  },
+  {
+   "label": "Spectral projection of (sin x + sin y, 0): error against (sin y, 0)",
+   "value": "5.61e-16",
+   "from": "numpy FFT, 64 x 64 periodic (the code on this page)"
+  },
+  {
+   "label": "Kinetic energy before and after that projection",
+   "value": "0.5 and 0.25",
+   "from": "numpy FFT"
+  },
+  {
+   "label": "Projection test scene: kinetic energy before and after an exact solve",
+   "value": "0.001533 and 0.0006284",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js), 600 CG iterations, N = 64"
+  },
+  {
+   "label": "Projection test scene: max divergence before and after",
+   "value": "0.0732 and 0.00131",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "max |div(curl psi)| with the solver's divergence",
+   "value": "2.78e-17",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js), also tests/js/flow_operator_test.mjs"
+  },
+  {
+   "label": "Divergence left after an exact solve, smooth field (N = 32)",
+   "value": "0.00241 of before",
+   "from": "tools/flow_numbers.mjs: the Flow workspace's own solver (flow_core.js)"
+  },
+  {
+   "label": "Density change at Mach 0.3, Ma^2/2",
+   "value": "4.5 %",
+   "from": "arithmetic"
+  }
+ ],
+ "live": [
+  {
+   "route": "flow?preset=4&view=divergence",
+   "label": "Flow: projection test, divergence after the projection",
+   "static_ok": true
+  },
+  {
+   "route": "flow?preset=2",
+   "label": "Flow: lid-driven cavity, Re = 250",
+   "static_ok": true
+  }
+ ],
+ "related": [
+  "concept.flow.projection-and-the-pressure-poisson-matrix",
+  "concept.flow.advection-and-numerical-diffusion",
+  "concept.low-reynolds-flow-poiseuille-dean-and-inertial-focusing"
+ ],
+ "cite": [
+  "white2011"
+ ],
+ "provenance": {
+  "author": "agent (Claude), WP-A2",
+  "opened_image": "media/flow/flow-projection_dark.webp",
+  "reviewed_by_owner": false,
+  "date": "2026-10-06"
+ }
+}
