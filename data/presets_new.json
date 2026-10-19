@@ -1,0 +1,54 @@
+{
+ "presets": [
+  {
+   "key": "periodic-1",
+   "ws": "periodic",
+   "params": {
+    "stage": 1
+   },
+   "route": "periodic?stage=1",
+   "title": "Lavoisier, 1789: sort the 33 simple substances",
+   "sub": "Periodic Table Builder · stage 1"
+  },
+  {
+   "key": "periodic-2",
+   "ws": "periodic",
+   "params": {
+    "stage": 2
+   },
+   "route": "periodic?stage=2",
+   "title": "Atomic weight, 1860s: order the elements",
+   "sub": "Periodic Table Builder · stage 2"
+  },
+  {
+   "key": "periodic-3",
+   "ws": "periodic",
+   "params": {
+    "stage": 3
+   },
+   "route": "periodic?stage=3",
+   "title": "Mendeleev, 1869: predict the missing element",
+   "sub": "Periodic Table Builder · stage 3"
+  },
+  {
+   "key": "periodic-4",
+   "ws": "periodic",
+   "params": {
+    "stage": 4
+   },
+   "route": "periodic?stage=4",
+   "title": "Moseley, 1913: the atomic number from X-rays",
+   "sub": "Periodic Table Builder · stage 4"
+  },
+  {
+   "key": "periodic-5",
+   "ws": "periodic",
+   "params": {
+    "stage": 5
+   },
+   "route": "periodic?stage=5",
+   "title": "Shells, 1920s: fill subshells and build the table",
+   "sub": "Periodic Table Builder · stage 5"
+  }
+ ]
+}

@@ -14,6 +14,7 @@ export const WORKSPACES = [
   { id: "deform", title: "Deform", blurb: "Maps (x, y) to (u, v) and their Jacobian; lattice deformation in 3D.", group: "Mathematics", phase: 3 },
   { id: "flow", title: "Flow", blurb: "Smoke, shear layers, cavity flow and the projection step.", group: "Engineering", phase: 3 },
   { id: "solver", title: "Solver", blurb: "ODE phase planes, equations, PDEs and regression.", group: "Engineering", phase: 3 },
+  { id: "periodic", title: "Periodic Table Builder", blurb: "Rebuild the periodic table in five historical steps, from Lavoisier to electron shells.", group: "Chemistry", phase: 4, live: true },
 ];
 
 export const byId = Object.fromEntries(WORKSPACES.map((w) => [w.id, w]));

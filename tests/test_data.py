@@ -68,6 +68,15 @@ def test_relative_links_in_html_and_js_modules_resolve():
             assert os.path.exists(os.path.normpath(os.path.join(os.path.dirname(js), ref))), (js, ref)
 
 
+def test_periodic_module_data():
+    d = load("data/periodic.json")
+    assert len(d["els"]) == 118 and len(d["lav"]) == 33
+    assert [e["z"] for e in d["els"]] == list(range(1, 119))
+    assert all(r["ws"] == "periodic" for r in load("data/presets_new.json")["presets"])
+    ids = {s["id"] for s in load("data/subjects.json")["subjects"]}
+    assert "chemistry" in ids
+
+
 def test_licences_present():
     assert os.path.exists(os.path.join(ROOT, "vendor", "katex", "LICENSE"))
     assert os.path.exists(os.path.join(ROOT, "fonts", "LICENSES.md"))

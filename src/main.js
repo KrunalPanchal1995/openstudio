@@ -4,6 +4,7 @@ import * as host from "./core/host.js";
 import * as views from "./ui/views.js";
 import { explain } from "./ui/explain.js";
 import { WORKSPACES } from "./workspaces/registry.js";
+import { isLive, run as runLive } from "./ui/live.js";
 
 host.init();
 
@@ -11,10 +12,10 @@ host.init();
 route("subjects", (r) => (r.params.s ? views.subject(r.params.s) : views.subjects()));
 route("explain", (r) => explain(r.params.id));
 route("workspaces", () => views.workspaces());
-route("w", (r) => views.workspace(r.params.id, r.params));
+route("w", (r) => (isLive(r.params.id) ? runLive(r.params.id, r.params) : views.workspace(r.params.id, r.params)));
 route("search", (r) => views.search(r.params.q));
 // old deep links: #atlas?ch=S32&ex=0 and the rest
-for (const w of WORKSPACES) route(w.id, (r) => views.workspace(w.id, r.params));
+for (const w of WORKSPACES) route(w.id, (r) => (isLive(w.id) ? runLive(w.id, r.params) : views.workspace(w.id, r.params)));
 route("*", (r) => views.subjects());
 
 // chrome

@@ -42,6 +42,7 @@ def main():
         rec = {"key": it["key"], "ws": ws, "params": params, "route": ws + ("?" + q if q else ""), "title": it["title"],
                "sub": it["sub"]}
         presets.append(rec)
+    presets += load("data/presets_new.json")["presets"]  # instruments added after the rebuild started
     dump("data/presets.json", {"presets": presets})
     print(len(idx), "explainers,", len(presets), "presets")
 

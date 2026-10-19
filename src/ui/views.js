@@ -63,6 +63,9 @@ export async function subject(id) {
   put(root, 
     h("p.crumb", h("a", { href: "#subjects" }, "Subjects"), " / ", s.title),
     h("section.hero", h("h1", s.title), h("p.lede", s.blurb)),
+    s.instruments && s.instruments.length
+      ? h("section", h("h2", "Instruments"), h("ul.list", s.instruments.map((i) => h("li", h("a", { href: href("w", { id: i }) }, byId[i].title), h("span.meta", " " + byId[i].blurb)))))
+      : null,
     s.atlas.length
       ? h("section", h("h2", "Atlas chapters"), h("ul.list", s.atlas.map((a) => h("li", h("a", { href: "#" + a.route }, `${a.id} · ${a.title}`), h("span.meta", ` ${a.examples} examples`)))))
       : null,
@@ -102,7 +105,7 @@ export async function workspaces() {
           WORKSPACES.filter((w) => w.group === g).map((w) =>
             h(
               "li.card",
-              h("a.card__link", { href: href("w", { id: w.id }) }, h("h3", w.title), h("p", w.blurb), h("p.meta", `${n[w.id] || 0} presets`, w.live ? "" : ` · coming in phase ${w.phase}`))
+              h("a.card__link", { href: href("w", { id: w.id }) }, h("h3", w.title), h("p", w.blurb), h("p.meta", `${n[w.id] || 0} presets`, w.live ? " · live" : ` · coming in phase ${w.phase}`))
             )
           )
         )
