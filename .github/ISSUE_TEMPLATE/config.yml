@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report this in the central pan-iit-oss repository
+    url: https://github.com/KrunalPanchal1995/pan-iit-oss/issues/new
+    about: Issues for all pan-iit-oss projects are now tracked in one place.
